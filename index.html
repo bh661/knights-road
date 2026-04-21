@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Knight's Road</title>
+<style>
+/* ── DESIGN TOKENS ─────────────────────────────────── */
+:root {
+  --bg:       #f6f1e7;
+  --k-text:   #2a1a0a;
+  --c-text:   #1a1a1a;
+  --divider:  #c8b892;
+  --accent:   #8b5a2b;
+  --acc-dk:   #6b3a1b;
+  --muted:    #7a6a55;
+  --font-k:   Georgia, 'Times New Roman', serif;
+  --font-c:   'Courier New', 'Lucida Console', ui-monospace, monospace;
+  --sz-k:     16px;
+  --sz-c:     13px;
+  --anim:     200ms;
+}
+
+/* ── RESET ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body { background: var(--bg); color: var(--k-text); font-family: var(--font-k); min-height: 100vh; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.screen { display: none; }
+
+/* ── TITLE SCREEN ──────────────────────────────────── */
+#title-screen {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 48px 24px;
+}
+.t-title {
+  font-family: var(--font-k); font-style: italic;
+  font-size: clamp(2.4rem, 7vw, 4rem);
+  letter-spacing: .02em; margin-bottom: 12px;
+}
+.t-sub {
+  font-family: var(--font-c); font-size: .85rem;
+  color: var(--muted); letter-spacing: .06em; margin-bottom: 6px;
+}
+.t-byline {
+  font-family: var(--font-c); font-size: .75rem;
+  color: var(--muted); margin-bottom: 44px;
+}
+.t-epigraph {
+  font-family: var(--font-k); font-style: italic;
+  font-size: 1.05rem; color: var(--muted);
+  max-width: 520px; line-height: 1.65; margin-bottom: 48px;
+  border-left: 2px solid var(--divider); padding-left: 20px; text-align: left;
+}
+.t-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+/* ── BUTTONS ───────────────────────────────────────── */
+.btn {
+  font-family: var(--font-c); font-size: .8rem; letter-spacing: .1em;
+  text-transform: uppercase; padding: 11px 26px;
+  border: 1px solid var(--accent); background: transparent; color: var(--accent);
+  cursor: pointer; transition: background var(--anim), color var(--anim);
+}
+.btn:hover, .btn:focus-visible { background: var(--accent); color: var(--bg); outline: none; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.btn-fill { background: var(--accent); color: var(--bg); }
+.btn-fill:hover, .btn-fill:focus-visible { background: var(--acc-dk); }
+
+/* ── CHAPTER INTRO OVERLAY ─────────────────────────── */
+#ch-intro {
+  position: fixed; inset: 0; z-index: 50;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 48px 24px;
+}
+#ch-intro.hidden { display: none; }
+#ch-intro.fading { animation: fadeOut 350ms ease-out forwards; }
+.ci-illus { width: 60%; max-width: 460px; margin-bottom: 28px; }
+.ci-illus svg { width: 100%; height: auto; display: block; }
+.ci-num {
+  font-family: var(--font-c); font-size: .7rem;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.ci-title {
+  font-family: var(--font-k);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  margin-bottom: 8px;
+}
+.ci-subtitle {
+  font-family: var(--font-c); font-size: .72rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+
+/* ── GAME SCREEN ───────────────────────────────────── */
+#game-screen { display: flex; flex-direction: column; min-height: 100vh; }
+
+#topbar {
+  height: 40px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 20px;
+  border-bottom: 1px solid var(--divider);
+  flex-shrink: 0; position: sticky; top: 0;
+  background: var(--bg); z-index: 20;
+}
+.tb-title {
+  font-family: var(--font-c); font-size: .68rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.tb-actions { display: flex; gap: 12px; align-items: center; }
+.tb-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-c); font-size: .72rem;
+  color: var(--muted); letter-spacing: .05em; padding: 3px 6px;
+}
+.tb-btn:hover { color: var(--accent); }
+.tb-btn:focus-visible { outline: 1px solid var(--accent); }
+
+#ch-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 20px; border-bottom: 1px solid var(--divider);
+  flex-shrink: 0; background: var(--bg);
+}
+.ch-thumb { width: 56px; height: 42px; flex-shrink: 0; overflow: hidden; }
+.ch-thumb svg { width: 100%; height: 100%; display: block; }
+.ch-num {
+  font-family: var(--font-c); font-size: .65rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.ch-name { font-family: var(--font-k); font-size: .95rem; }
+
+#game-main {
+  flex: 1; max-width: 1100px; width: 100%;
+  margin: 0 auto; padding-bottom: 148px;
+}
+
+#cols { display: flex; min-height: 100%; }
+.col { flex: 1; padding: 28px 24px; }
+
+#col-k {
+  border-right: 1px solid var(--divider);
+  font-family: var(--font-k); font-size: var(--sz-k);
+  line-height: 1.6; color: var(--k-text);
+}
+#col-c {
+  font-family: var(--font-c); font-size: var(--sz-c);
+  line-height: 1.6; color: var(--c-text);
+}
+.col-lbl {
+  display: block; font-family: var(--font-c); font-size: .62rem;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 22px;
+}
+.col-body .tb { margin-bottom: 1.5em; }
+.col-body .tb:last-child { margin-bottom: 0; }
+.col-body p { margin-bottom: .9em; }
+.col-body p:last-child { margin-bottom: 0; }
+
+.fade-in { animation: fadeIn var(--anim) ease-in both; }
+
+/* ── CHOICE BAR ────────────────────────────────────── */
+#choice-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg); border-top: 1px solid var(--divider);
+  padding: 14px 20px 18px; z-index: 15;
+}
+.cbar-inner { max-width: 1100px; margin: 0 auto; }
+.cb-prompt {
+  font-family: var(--font-c); font-size: .68rem;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); text-align: center; margin-bottom: 10px;
+}
+.cb-btns { display: flex; gap: 10px; justify-content: center; }
+.ch-btn {
+  flex: 1; min-width: 150px; max-width: 300px;
+  text-align: left; font-family: var(--font-c);
+  font-size: .76rem; line-height: 1.4; padding: 10px 14px;
+  border: 1px solid var(--accent); background: transparent;
+  color: var(--accent); cursor: pointer;
+  transition: background var(--anim), color var(--anim);
+}
+.ch-btn::before { font-weight: bold; opacity: .55; margin-right: 5px; }
+.ch-btn[data-n="1"]::before { content: "[1]"; }
+.ch-btn[data-n="2"]::before { content: "[2]"; }
+.ch-btn[data-n="3"]::before { content: "[3]"; }
+.ch-btn:hover, .ch-btn:focus-visible { background: var(--accent); color: var(--bg); outline: none; }
+.ch-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ch-btn.picked { background: var(--accent); color: var(--bg); pointer-events: none; }
+.cb-action { display: flex; justify-content: center; gap: 12px; }
+
+/* ── CLOSING SCREEN ────────────────────────────────── */
+#closing-screen { display: flex; flex-direction: column; min-height: 100vh; }
+#closing-main { max-width: 1100px; width: 100%; margin: 0 auto; padding-bottom: 60px; }
+#closing-cols { display: flex; padding: 28px 0; border-bottom: 1px solid var(--divider); }
+.cl-col { flex: 1; padding: 0 24px; line-height: 1.65; }
+.cl-col:first-child {
+  border-right: 1px solid var(--divider);
+  font-family: var(--font-k); font-size: var(--sz-k); color: var(--k-text);
+}
+.cl-col:last-child { font-family: var(--font-c); font-size: var(--sz-c); color: var(--c-text); }
+.cl-col p { margin-bottom: 1em; }
+
+.afterword { max-width: 560px; margin: 44px auto; padding: 0 24px; text-align: center; }
+.aw-title {
+  font-family: var(--font-c); font-size: .68rem;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 22px;
+}
+.aw-body {
+  font-family: var(--font-k); font-style: italic;
+  font-size: 1.05rem; line-height: 1.78; color: var(--k-text);
+  margin-bottom: 36px;
+}
+.cl-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ── MODALS ────────────────────────────────────────── */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.45); z-index: 100;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--bg); border: 1px solid var(--divider);
+  max-width: 460px; width: 100%; padding: 32px; position: relative;
+}
+.m-title { font-family: var(--font-k); font-size: 1.2rem; margin-bottom: 16px; }
+.m-body {
+  font-family: var(--font-c); font-size: .82rem;
+  line-height: 1.65; color: var(--c-text); margin-bottom: 22px;
+}
+.m-body p { margin-bottom: .75em; }
+.m-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; font-size: 1.4rem;
+  line-height: 1; color: var(--muted); cursor: pointer;
+}
+.m-close:hover { color: var(--k-text); }
+
+/* ── SETTINGS ──────────────────────────────────────── */
+#settings {
+  display: none; position: fixed; top: 40px; right: 0;
+  width: 260px; background: var(--bg);
+  border: 1px solid var(--divider); border-top: none;
+  padding: 18px; z-index: 30;
+}
+#settings.open { display: block; }
+.s-title {
+  font-family: var(--font-c); font-size: .68rem;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+}
+.s-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.s-lbl { font-family: var(--font-c); font-size: .78rem; color: var(--c-text); }
+.tog { position: relative; display: inline-block; width: 34px; height: 18px; }
+.tog input { opacity: 0; width: 0; height: 0; }
+.tog-s { position: absolute; inset: 0; background: var(--divider); cursor: pointer; transition: background .2s; }
+.tog-s::before {
+  content: ''; position: absolute;
+  width: 12px; height: 12px; left: 3px; bottom: 3px;
+  background: white; transition: transform .2s;
+}
+.tog input:checked + .tog-s { background: var(--accent); }
+.tog input:checked + .tog-s::before { transform: translateX(16px); }
+
+/* ── MOBILE HINT ───────────────────────────────────── */
+#voice-hint {
+  display: none; position: fixed; top: 92px; right: 12px;
+  background: var(--accent); color: var(--bg);
+  font-family: var(--font-c); font-size: .65rem;
+  letter-spacing: .08em; padding: 5px 9px;
+  z-index: 5; pointer-events: none;
+}
+
+/* ── ANIMATIONS ────────────────────────────────────── */
+@keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes fadeOut { from { opacity: 1 } to { opacity: 0 } }
+
+/* ── RESPONSIVE ────────────────────────────────────── */
+@media (max-width: 900px) {
+  .ch-btn { font-size: .72rem; padding: 9px 12px; }
+}
+@media (max-width: 640px) {
+  #cols { flex-direction: column; }
+  #col-k { border-right: none; border-bottom: 2px solid var(--divider); }
+  .cb-btns { flex-direction: column; }
+  .ch-btn { max-width: 100%; min-width: 0; }
+  #closing-cols { flex-direction: column; }
+  .cl-col:first-child { border-right: none; border-bottom: 1px solid var(--divider); padding-bottom: 24px; margin-bottom: 24px; }
+  .ci-illus { width: 86%; }
+  #settings { width: 100%; }
+  #voice-hint { display: block; }
+}
+
+/* ── REDUCED MOTION ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+body.no-motion *, body.no-motion *::before, body.no-motion *::after {
+  animation-duration: 1ms !important; transition-duration: 1ms !important;
+}
+
+/* ── HIGH CONTRAST ─────────────────────────────────── */
+body.hi-con {
+  --bg: #ffffff; --k-text: #000000; --c-text: #000000;
+  --divider: #000000; --accent: #8b0000; --muted: #444444;
+}
+
+/* ── LARGE FONT ────────────────────────────────────── */
+body.big-font { --sz-k: 19px; --sz-c: 17px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     SVG SPRITE BLOCK
+═══════════════════════════════════════════════════════ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+
+  <!-- I.1 The First Sally: pre-dawn, horse+rider with lance -->
+  <symbol id="illus-first-sally" viewBox="0 0 480 320">
+    <title>Chapter I.1 — The knight rides out before dawn.</title>
+    <!-- Night sky -->
+    <rect width="480" height="320" fill="#1a1a2e"/>
+    <!-- Dawn glow on horizon -->
+    <ellipse cx="240" cy="200" rx="200" ry="22" fill="#c87020" opacity="0.35"/>
+    <!-- Sun -->
+    <circle cx="240" cy="198" r="17" fill="#f6c744"/>
+    <!-- Far hills -->
+    <path d="M0 205 Q90 178 180 192 Q270 205 360 185 Q420 175 480 188 L480 250 L0 250Z" fill="#2a1a0a"/>
+    <!-- Near ground -->
+    <path d="M0 248 Q80 236 160 243 Q260 252 360 238 Q420 232 480 240 L480 320 L0 320Z" fill="#160a04"/>
+    <!-- Horse body -->
+    <ellipse cx="330" cy="268" rx="44" ry="18" fill="#0e0705"/>
+    <!-- Horse legs -->
+    <rect x="296" y="274" width="6" height="28" rx="2" fill="#0e0705"/>
+    <rect x="310" y="276" width="6" height="26" rx="2" fill="#0e0705" transform="rotate(5 310 276)"/>
+    <rect x="340" y="274" width="6" height="28" rx="2" fill="#0e0705"/>
+    <rect x="354" y="276" width="6" height="26" rx="2" fill="#0e0705" transform="rotate(-5 354 276)"/>
+    <!-- Horse neck + head -->
+    <path d="M296 256 Q284 237 290 223 Q297 213 308 220 Q312 238 302 256Z" fill="#0e0705"/>
+    <ellipse cx="287" cy="218" rx="12" ry="9" fill="#0e0705" transform="rotate(-25 287 218)"/>
+    <!-- Rider torso -->
+    <rect x="308" y="238" width="18" height="26" rx="2" fill="#0e0705" transform="rotate(4 308 238)"/>
+    <!-- Rider helmet/head -->
+    <ellipse cx="318" cy="230" rx="9" ry="10" fill="#0e0705"/>
+    <rect x="310" y="232" width="17" height="5" fill="#0e0705"/>
+    <!-- Lance (diagonal up-right) -->
+    <line x1="316" y1="245" x2="400" y2="162" stroke="#0e0705" stroke-width="3" stroke-linecap="round"/>
+    <!-- Horse tail -->
+    <path d="M370 265 Q384 254 379 270 Q374 280 366 274Z" fill="#0e0705"/>
+    <!-- Shield -->
+    <ellipse cx="304" cy="253" rx="8" ry="10" fill="#1a0f08"/>
+  </symbol>
+
+  <!-- I.3 The Vigil at the Inn: building with lit windows, kneeling figure, ledger figure -->
+  <symbol id="illus-vigil-inn" viewBox="0 0 480 320">
+    <title>Chapter I.3 — The knight keeps vigil at the inn.</title>
+    <!-- Night sky -->
+    <rect width="480" height="320" fill="#0d0a18"/>
+    <!-- Ground -->
+    <rect y="240" width="480" height="80" fill="#1a0f08"/>
+    <!-- Inn building main -->
+    <rect x="120" y="100" width="240" height="145" fill="#160c06"/>
+    <!-- Roof -->
+    <polygon points="110,100 240,42 370,100" fill="#0f0804"/>
+    <!-- Windows (lit) -->
+    <rect x="148" y="130" width="34" height="38" fill="#f6c744" opacity=".85"/>
+    <rect x="223" y="130" width="34" height="38" fill="#f6c744" opacity=".75"/>
+    <rect x="298" y="130" width="34" height="38" fill="#f6c744" opacity=".80"/>
+    <!-- Door arch -->
+    <rect x="210" y="205" width="60" height="40" fill="#0d0a18"/>
+    <path d="M210 205 Q240 188 270 205" fill="#0d0a18"/>
+    <!-- Trough -->
+    <rect x="62" y="224" width="52" height="16" rx="2" fill="#2a1a0a"/>
+    <rect x="65" y="218" width="46" height="8" rx="1" fill="#1a0f08"/>
+    <!-- Kneeling knight figure -->
+    <ellipse cx="84" cy="214" rx="9" ry="7" fill="#0e0705"/>
+    <rect x="76" y="218" width="16" height="20" rx="2" fill="#0e0705"/>
+    <!-- Kneeling - one leg -->
+    <rect x="76" y="234" width="8" height="8" rx="1" fill="#0e0705" transform="rotate(15 76 234)"/>
+    <!-- Lance -->
+    <line x1="88" y1="217" x2="88" y2="178" stroke="#0e0705" stroke-width="3" stroke-linecap="round"/>
+    <!-- Innkeeper with ledger -->
+    <rect x="370" y="200" width="14" height="36" rx="2" fill="#0e0705"/>
+    <ellipse cx="377" cy="196" rx="9" ry="10" fill="#0e0705"/>
+    <!-- Ledger/book shape -->
+    <rect x="380" y="210" width="22" height="16" rx="1" fill="#2a1a0a"/>
+  </symbol>
+
+  <!-- I.8 The Windmills: 3 windmills, charging knight lower-left -->
+  <symbol id="illus-windmills" viewBox="0 0 480 320">
+    <title>Chapter I.8 — The knight charges the windmills.</title>
+    <!-- Sky -->
+    <rect width="480" height="320" fill="#c8d8e8"/>
+    <!-- Ground -->
+    <rect y="232" width="480" height="88" fill="#e8d5a3"/>
+    <rect y="226" width="480" height="10" fill="#d4c08a"/>
+    <!-- Windmill 1 (tallest, center) -->
+    <rect x="272" y="120" width="16" height="114" fill="#2a1a0a"/>
+    <ellipse cx="280" cy="120" rx="16" ry="14" fill="#2a1a0a"/>
+    <line x1="280" y1="120" x2="280" y2="70"  stroke="#2a1a0a" stroke-width="6" stroke-linecap="round"/>
+    <line x1="280" y1="120" x2="318" y2="148" stroke="#2a1a0a" stroke-width="6" stroke-linecap="round"/>
+    <line x1="280" y1="120" x2="280" y2="170" stroke="#2a1a0a" stroke-width="6" stroke-linecap="round"/>
+    <line x1="280" y1="120" x2="242" y2="148" stroke="#2a1a0a" stroke-width="6" stroke-linecap="round"/>
+    <!-- Windmill 2 (medium, right) -->
+    <rect x="368" y="148" width="12" height="84" fill="#2a1a0a"/>
+    <ellipse cx="374" cy="148" rx="12" ry="11" fill="#2a1a0a"/>
+    <line x1="374" y1="148" x2="374" y2="110" stroke="#2a1a0a" stroke-width="5" stroke-linecap="round"/>
+    <line x1="374" y1="148" x2="406" y2="170" stroke="#2a1a0a" stroke-width="5" stroke-linecap="round"/>
+    <line x1="374" y1="148" x2="374" y2="186" stroke="#2a1a0a" stroke-width="5" stroke-linecap="round"/>
+    <line x1="374" y1="148" x2="342" y2="170" stroke="#2a1a0a" stroke-width="5" stroke-linecap="round"/>
+    <!-- Windmill 3 (small, far right) -->
+    <rect x="436" y="168" width="9" height="64" fill="#2a1a0a"/>
+    <ellipse cx="441" cy="168" rx="9" ry="8" fill="#2a1a0a"/>
+    <line x1="441" y1="168" x2="441" y2="140" stroke="#2a1a0a" stroke-width="4" stroke-linecap="round"/>
+    <line x1="441" y1="168" x2="464" y2="184" stroke="#2a1a0a" stroke-width="4" stroke-linecap="round"/>
+    <line x1="441" y1="168" x2="441" y2="196" stroke="#2a1a0a" stroke-width="4" stroke-linecap="round"/>
+    <line x1="441" y1="168" x2="418" y2="184" stroke="#2a1a0a" stroke-width="4" stroke-linecap="round"/>
+    <!-- Charging knight (lower-left) -->
+    <ellipse cx="102" cy="260" rx="38" ry="16" fill="#1a0f08"/>
+    <path d="M72 254 Q62 235 67 222 Q74 212 85 218 Q89 234 80 254Z" fill="#1a0f08"/>
+    <ellipse cx="63" cy="217" rx="11" ry="8" fill="#1a0f08" transform="rotate(-22 63 217)"/>
+    <rect x="86" y="236" width="16" height="22" rx="2" fill="#1a0f08" transform="rotate(6 86 236)"/>
+    <ellipse cx="95" cy="229" rx="8" ry="9" fill="#1a0f08"/>
+    <!-- Lance raised toward windmill -->
+    <line x1="93" y1="240" x2="200" y2="162" stroke="#1a0f08" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Horse tail -->
+    <path d="M136 258 Q148 246 144 260 Q140 270 133 265Z" fill="#1a0f08"/>
+  </symbol>
+
+  <!-- I.22 The Galley Slaves: prisoners chained, guards, knight -->
+  <symbol id="illus-galley-slaves" viewBox="0 0 480 320">
+    <title>Chapter I.22 — The knight confronts the galley slaves.</title>
+    <!-- Sky -->
+    <rect width="480" height="320" fill="#b8c8d8"/>
+    <!-- Ground -->
+    <rect y="248" width="480" height="72" fill="#e0cc98"/>
+    <rect y="242" width="480" height="10" fill="#c8b87a"/>
+    <!-- 5 prisoners walking in silhouette (center) -->
+    <!-- Prisoner 1 -->
+    <ellipse cx="185" cy="228" rx="8" ry="7" fill="#1a0f08"/>
+    <rect x="178" y="233" width="14" height="22" rx="2" fill="#1a0f08"/>
+    <line x1="181" y1="252" x2="178" y2="268" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <line x1="190" y1="252" x2="192" y2="268" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <!-- Prisoner 2 -->
+    <ellipse cx="222" cy="226" rx="8" ry="7" fill="#1a0f08"/>
+    <rect x="215" y="231" width="14" height="22" rx="2" fill="#1a0f08"/>
+    <line x1="218" y1="250" x2="214" y2="266" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <line x1="227" y1="250" x2="230" y2="266" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <!-- Prisoner 3 -->
+    <ellipse cx="258" cy="228" rx="8" ry="7" fill="#1a0f08"/>
+    <rect x="251" y="233" width="14" height="22" rx="2" fill="#1a0f08"/>
+    <line x1="254" y1="252" x2="250" y2="268" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <line x1="263" y1="252" x2="266" y2="268" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <!-- Prisoner 4 -->
+    <ellipse cx="294" cy="226" rx="8" ry="7" fill="#1a0f08"/>
+    <rect x="287" y="231" width="14" height="22" rx="2" fill="#1a0f08"/>
+    <line x1="290" y1="250" x2="286" y2="266" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <line x1="299" y1="250" x2="302" y2="266" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <!-- Prisoner 5 -->
+    <ellipse cx="330" cy="228" rx="8" ry="7" fill="#1a0f08"/>
+    <rect x="323" y="233" width="14" height="22" rx="2" fill="#1a0f08"/>
+    <line x1="326" y1="252" x2="322" y2="268" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <line x1="335" y1="252" x2="338" y2="268" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <!-- Yellow chain linking wrists -->
+    <path d="M192 244 Q207 240 215 244" stroke="#f6c744" stroke-width="3" fill="none"/>
+    <path d="M229 242 Q244 238 251 242" stroke="#f6c744" stroke-width="3" fill="none"/>
+    <path d="M265 244 Q280 240 287 244" stroke="#f6c744" stroke-width="3" fill="none"/>
+    <path d="M301 242 Q316 238 323 242" stroke="#f6c744" stroke-width="3" fill="none"/>
+    <!-- Mounted guard (right) -->
+    <ellipse cx="408" cy="256" rx="32" ry="14" fill="#1a0f08"/>
+    <path d="M384 250 Q374 234 380 222 Q386 213 396 219 Q399 233 390 250Z" fill="#1a0f08"/>
+    <ellipse cx="375" cy="217" rx="9" ry="7" fill="#1a0f08" transform="rotate(-20 375 217)"/>
+    <rect x="397" y="232" width="14" height="20" rx="2" fill="#1a0f08" transform="rotate(5 397 232)"/>
+    <ellipse cx="405" cy="225" rx="7" ry="8" fill="#1a0f08"/>
+    <!-- Halberd -->
+    <line x1="406" y1="226" x2="410" y2="178" stroke="#1a0f08" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="406,180 414,168 410,178 402,168" fill="#1a0f08"/>
+    <!-- Knight (left, lance raised) -->
+    <ellipse cx="86" cy="258" rx="36" ry="14" fill="#1a0f08"/>
+    <path d="M62 252 Q52 234 58 222 Q65 213 75 219 Q78 234 70 252Z" fill="#1a0f08"/>
+    <ellipse cx="52" cy="217" rx="10" ry="7" fill="#1a0f08" transform="rotate(-22 52 217)"/>
+    <rect x="76" y="234" width="15" height="20" rx="2" fill="#1a0f08" transform="rotate(4 76 234)"/>
+    <ellipse cx="85" cy="227" rx="8" ry="9" fill="#1a0f08"/>
+    <line x1="83" y1="238" x2="148" y2="188" stroke="#1a0f08" stroke-width="3" stroke-linecap="round"/>
+    <path d="M118 256 Q130 244 126 258 Q122 268 115 263Z" fill="#1a0f08"/>
+  </symbol>
+
+  <!-- I.49-50 The Cage and the Canon: ox-cart cage, robed figure, mounted canon -->
+  <symbol id="illus-cage-canon" viewBox="0 0 480 320">
+    <title>Chapter I.49–50 — The knight is carried home in a cage.</title>
+    <!-- Sky -->
+    <rect width="480" height="320" fill="#d0c4b0"/>
+    <!-- Ground -->
+    <rect y="252" width="480" height="68" fill="#e8d5a3"/>
+    <rect y="246" width="480" height="10" fill="#d4c08a"/>
+    <!-- Cart body -->
+    <rect x="180" y="188" width="180" height="64" rx="3" fill="#4a2e14"/>
+    <!-- Cage bars (vertical) -->
+    <line x1="200" y1="188" x2="200" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <line x1="220" y1="188" x2="220" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <line x1="240" y1="188" x2="240" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <line x1="260" y1="188" x2="260" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <line x1="280" y1="188" x2="280" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <line x1="300" y1="188" x2="300" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <line x1="320" y1="188" x2="320" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <line x1="340" y1="188" x2="340" y2="252" stroke="#2a1a0a" stroke-width="3"/>
+    <!-- Cage horizontal bars -->
+    <line x1="180" y1="208" x2="360" y2="208" stroke="#2a1a0a" stroke-width="2"/>
+    <line x1="180" y1="230" x2="360" y2="230" stroke="#2a1a0a" stroke-width="2"/>
+    <!-- Robed figure inside cage (center) -->
+    <!-- Robe (tall rect) -->
+    <rect x="256" y="196" width="20" height="52" rx="3" fill="#1a0f08"/>
+    <!-- Head -->
+    <ellipse cx="266" cy="192" rx="10" ry="11" fill="#1a0f08"/>
+    <!-- Arms outstretched to bars -->
+    <line x1="256" y1="218" x2="240" y2="214" stroke="#1a0f08" stroke-width="4" stroke-linecap="round"/>
+    <line x1="276" y1="218" x2="300" y2="214" stroke="#1a0f08" stroke-width="4" stroke-linecap="round"/>
+    <!-- Cart wheels -->
+    <circle cx="204" cy="255" r="18" fill="none" stroke="#2a1a0a" stroke-width="4"/>
+    <line x1="204" y1="237" x2="204" y2="273" stroke="#2a1a0a" stroke-width="2"/>
+    <line x1="186" y1="255" x2="222" y2="255" stroke="#2a1a0a" stroke-width="2"/>
+    <circle cx="336" cy="255" r="18" fill="none" stroke="#2a1a0a" stroke-width="4"/>
+    <line x1="336" y1="237" x2="336" y2="273" stroke="#2a1a0a" stroke-width="2"/>
+    <line x1="318" y1="255" x2="354" y2="255" stroke="#2a1a0a" stroke-width="2"/>
+    <!-- Cart shaft/tongue -->
+    <line x1="180" y1="248" x2="136" y2="250" stroke="#4a2e14" stroke-width="5" stroke-linecap="round"/>
+    <!-- Two oxen (simplified, left of cart) -->
+    <ellipse cx="108" cy="252" rx="30" ry="12" fill="#2a1a0a"/>
+    <path d="M82 248 Q74 236 80 228 Q86 222 94 226 Q97 238 90 248Z" fill="#2a1a0a"/>
+    <ellipse cx="74" cy="223" rx="9" ry="6" fill="#2a1a0a" transform="rotate(-10 74 223)"/>
+    <!-- Ox horns -->
+    <line x1="70" y1="219" x2="64" y2="210" stroke="#2a1a0a" stroke-width="2" stroke-linecap="round"/>
+    <line x1="78" y1="218" x2="80" y2="209" stroke="#2a1a0a" stroke-width="2" stroke-linecap="round"/>
+    <!-- Canon (mounted cleric, far left) -->
+    <ellipse cx="392" cy="258" rx="30" ry="12" fill="#1a0f08"/>
+    <path d="M368 252 Q358 238 364 228 Q370 219 380 224 Q383 238 375 252Z" fill="#1a0f08"/>
+    <ellipse cx="358" cy="223" rx="9" ry="7" fill="#1a0f08" transform="rotate(-18 358 223)"/>
+    <!-- Canon robes/body -->
+    <rect x="380" y="232" width="16" height="22" rx="4" fill="#1a0f08" transform="rotate(4 380 232)"/>
+    <ellipse cx="390" cy="225" rx="10" ry="11" fill="#1a0f08"/>
+    <!-- Canon hat (flat-brimmed clerical) -->
+    <ellipse cx="390" cy="216" rx="14" ry="4" fill="#1a0f08"/>
+    <rect x="384" y="210" width="12" height="8" rx="2" fill="#1a0f08"/>
+    <!-- Canon's horse tail -->
+    <path d="M418 256 Q430 244 426 258 Q422 268 415 263Z" fill="#1a0f08"/>
+  </symbol>
+
+</svg>
+
+<!-- ═══════════════════════════════════════════════════
+     TITLE SCREEN
+═══════════════════════════════════════════════════════ -->
+<div id="title-screen" class="screen">
+  <h1 class="t-title">The Knight's Road</h1>
+  <p class="t-sub">An interactive reading of Don Quijote, Part I</p>
+  <p class="t-byline">Boheng Hu · Arts and Cultures Towards the Crossroads · Spring 2026</p>
+  <blockquote class="t-epigraph">
+    <em>"In a village of La Mancha, whose name I have no wish to remember, there lived not long ago a gentleman..."</em>
+  </blockquote>
+  <div class="t-btns">
+    <button id="btn-begin" class="btn btn-fill">Begin</button>
+    <button id="btn-htr" class="btn">How to read</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER INTRO OVERLAY
+═══════════════════════════════════════════════════════ -->
+<div id="ch-intro" class="hidden" aria-live="polite" aria-atomic="true">
+  <div class="ci-illus" id="ci-illus-wrap"><!-- SVG injected by JS --></div>
+  <p class="ci-num" id="ci-num"></p>
+  <h2 class="ci-title" id="ci-title"></h2>
+  <p class="ci-subtitle" id="ci-subtitle"></p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     GAME SCREEN
+═══════════════════════════════════════════════════════ -->
+<div id="game-screen" class="screen">
+
+  <!-- Top bar -->
+  <div id="topbar" role="banner">
+    <span class="tb-title">The Knight's Road</span>
+    <div class="tb-actions">
+      <button class="tb-btn" id="btn-restart" title="Restart [R]">Restart</button>
+      <button class="tb-btn" id="btn-settings-open" title="Settings [Esc]">⚙ Settings</button>
+    </div>
+  </div>
+
+  <!-- Chapter header -->
+  <div id="ch-header">
+    <div class="ch-thumb" id="ch-thumb-wrap" aria-hidden="true"><!-- SVG injected --></div>
+    <div>
+      <p class="ch-num" id="ch-header-num"></p>
+      <p class="ch-name" id="ch-header-name"></p>
+    </div>
+  </div>
+
+  <!-- Dual columns -->
+  <main id="game-main" tabindex="-1">
+    <div id="cols">
+      <article id="col-k" aria-label="The Knight" aria-live="polite" aria-atomic="false">
+        <span class="col-lbl">The Knight</span>
+        <div class="col-body" id="k-body"></div>
+      </article>
+      <article id="col-c" aria-label="The Chronicle" aria-live="polite" aria-atomic="false">
+        <span class="col-lbl">The Chronicle</span>
+        <div class="col-body" id="c-body"></div>
+      </article>
+    </div>
+  </main>
+
+  <!-- Choice / action bar -->
+  <div id="choice-bar" role="region" aria-label="Choices">
+    <div class="cbar-inner">
+      <p class="cb-prompt" id="cb-prompt"></p>
+      <div id="cb-contents"><!-- buttons injected by JS --></div>
+    </div>
+  </div>
+
+</div><!-- #game-screen -->
+
+<!-- ═══════════════════════════════════════════════════
+     CLOSING SCREEN
+═══════════════════════════════════════════════════════ -->
+<div id="closing-screen" class="screen">
+
+  <div id="topbar-cl" style="height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--divider);flex-shrink:0;background:var(--bg);" role="banner">
+    <span class="tb-title">The Knight's Road</span>
+    <div class="tb-actions">
+      <button class="tb-btn" id="btn-restart-cl">Restart</button>
+    </div>
+  </div>
+
+  <div id="closing-main">
+    <div id="closing-cols">
+      <div class="cl-col">
+        <span class="col-lbl">The Knight</span>
+        <p>...these books have given me a life. Whatever else you name it — madness, folly, a delay against death — I name it mine.</p>
+      </div>
+      <div class="cl-col">
+        <span class="col-lbl">The Chronicle</span>
+        <p>The Canon, who had ridden beside the cart for the better part of a day, said nothing for a long time. He had not, the chronicler observes, expected to be shaken. He was shaken.</p>
+        <p>Here ends the First Part of the history of the ingenious gentleman Don Quijote de la Mancha, by Miguel de Cervantes Saavedra, published at Madrid in the year of Our Lord 1605.</p>
+      </div>
+    </div>
+
+    <div class="afterword">
+      <p class="aw-title">Afterword — on what this game argues</p>
+      <p class="aw-body">Two voices have been running beside each other for the last twenty minutes. Neither was permitted to call the other wrong. That is the one argument this game is making: that Cervantes, in Part I, declines to tell his reader which voice to trust, and that the refusal is the novel's most serious and most generous act. The man in the cage has done something with his middle years that most of the men who read about him never do. Whether you call it madness, folly, a delay against death, or a life — Cervantes will not say, and this game will not say.</p>
+      <div class="cl-btns">
+        <button class="btn btn-fill" id="btn-play-again">Play again</button>
+        <button class="btn" id="btn-read-analysis">Read the written analysis</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MODALS
+═══════════════════════════════════════════════════════ -->
+
+<!-- How to read -->
+<div id="htr-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="htr-title">
+  <div class="modal">
+    <button class="m-close" id="htr-close" aria-label="Close">×</button>
+    <h2 class="m-title" id="htr-title">How to read</h2>
+    <div class="m-body">
+      <p>The screen is divided into two columns. The left column is Don Quijote's first-person voice — his account of what is happening and what it means. The right column is the outer record: the narrator, bystanders, and the reported speech of other characters.</p>
+      <p>Both columns describe the same event. They never agree on what the event is. Neither is permitted to call the other correct.</p>
+      <p>You are not being asked to decide who is right. You are being asked to sit inside the tension.</p>
+    </div>
+    <button class="btn" id="htr-close-btn">Close</button>
+  </div>
+</div>
+
+<!-- Analysis -->
+<div id="analysis-modal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="an-title">
+  <div class="modal">
+    <button class="m-close" id="an-close" aria-label="Close">×</button>
+    <h2 class="m-title" id="an-title">Written Analysis</h2>
+    <div class="m-body">
+      <p>The accompanying written analysis — <em>The Knights Feed — Written Analysis.docx</em> — should be in the same folder as this file.</p>
+      <p>Open it alongside this game for the full argument this interactive reading is making.</p>
+    </div>
+    <button class="btn" id="an-close-btn">Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SETTINGS PANEL
+═══════════════════════════════════════════════════════ -->
+<div id="settings" role="complementary" aria-label="Settings">
+  <p class="s-title">Settings</p>
+  <div class="s-row">
+    <label class="s-lbl" for="tog-motion">Reduced motion</label>
+    <label class="tog"><input type="checkbox" id="tog-motion"><span class="tog-s"></span></label>
+  </div>
+  <div class="s-row">
+    <label class="s-lbl" for="tog-contrast">High contrast</label>
+    <label class="tog"><input type="checkbox" id="tog-contrast"><span class="tog-s"></span></label>
+  </div>
+  <div class="s-row">
+    <label class="s-lbl" for="tog-font">Larger text</label>
+    <label class="tog"><input type="checkbox" id="tog-font"><span class="tog-s"></span></label>
+  </div>
+</div>
+
+<!-- Mobile voice hint -->
+<div id="voice-hint" aria-hidden="true">⇵ both voices</div>
+
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ──────────────────────────────────────────────────────
+   CHAPTERS DATA  (prose verbatim from specification §7)
+────────────────────────────────────────────────────── */
+const CHAPTERS = [
+  {
+    id: 'I.1',
+    title: 'The First Sally',
+    subtitle: 'a village of La Mancha, before dawn',
+    illustId: 'illus-first-sally',
+    entry: {
+      knight: [
+        'It is not yet light. The housekeeper is asleep. My niece is asleep. The nag is saddled. I am in armor my grandfather last wore for a funeral, and the armor fits me better than it fit him.',
+        'I am fifty. My olla is more beef than mutton. My Fridays are lentils, my Saturdays scraps, my Sundays a pigeon when there is a pigeon. Three-quarters of my income goes to clothing; what is left goes to a jerkin I wear only to Mass. I have no wife. I have no son. I have no profession. I have watched thirty years of mornings like this one happen through my window.',
+        'Today I do not watch. Today I ride.'
+      ],
+      chronicle: [
+        'In a village of La Mancha, whose name the chronicler declines to recall, a certain hidalgo of about fifty years of age rose before his household, took an old lance and an older shield, saddled a thin horse, and prepared to leave the property in which he had lived all his life.',
+        'The poor gentleman, the chronicler reports, had with his reading and his reasonings lost his wits.',
+        'The niece slept on. The housekeeper slept on. The lad who sometimes saddled the nag had been given the morning free.'
+      ]
+    },
+    choices: [
+      {
+        id: 1,
+        label: 'Ride. The day is already yours.',
+        knight: ['I ride out through the yard gate. No one sees me go. The road is the color of old bread. Behind me: a house, a niece, forty years of lentils. Ahead: a road.'],
+        chronicle: ['The hidalgo rode out at a slow walk through the yard gate. A neighbor, rising to feed his chickens, saw him pass and later reported that the old gentleman was in armor and seemed to be going somewhere.']
+      },
+      {
+        id: 2,
+        label: 'Sit for one more hour at the window. Think.',
+        knight: ['I sit. One more lentil Friday. One more. The gray turns to gold against the whitewash. There is nothing in this window I have not memorized. The horse below is ready. I have never been the man who does not ride.'],
+        chronicle: ['The hidalgo sat for a quarter of an hour at the upper window, watching the yard. At about the quarter to five, by the chronicler\'s reckoning, he rose from the window, descended the stair, and rode out.']
+      },
+      {
+        id: 3,
+        label: 'Write a letter first. To the barber. Tell someone where you are going.',
+        knight: ['I write. I tear it up. I write again. The words the barber would need do not exist yet. I leave the paper on the desk with a line on it — “I have gone to do what I have always meant to do” — and I ride.'],
+        chronicle: ['A single sheet was later found on the hidalgo’s writing-desk. It bore one line, in the hand of a man writing quickly. The housekeeper could not read it. The parish priest, summoned, read it twice and did not comment.']
+      }
+    ],
+    outro: {
+      knight: ['The road does not know what century it is. Neither do I. Tomorrow or the day after I will find a castle. A castellan will knight me. The thing begins.'],
+      chronicle: ['He rode south. By midday he was on the plain. He met no adventures that first morning. He was, the chronicler is at pains to record, extremely happy.']
+    }
+  },
+
+  {
+    id: 'I.3',
+    title: 'The Vigil at the Inn',
+    subtitle: 'a venta on the highway, evening',
+    illustId: 'illus-vigil-inn',
+    entry: {
+      knight: [
+        'The castle rises from the dust of the road with four towers and a deep moat. The castellan, a stout man of some breeding, greets me at the gate. Two noble ladies of the court — one called Doña Tolosa, one called Doña Molinera — attend upon me. I have not yet been knighted; until I am, I cannot in good conscience undertake the great adventures I was made for. Tonight I will keep the vigil of arms in the chapel of the castle, which is the courtyard by the horse-trough.'
+      ],
+      chronicle: [
+        'Toward evening the hidalgo arrived at a roadside inn — a venta, of the common sort, with a yard, a well, a trough, and a loft for muleteers. The innkeeper, a man experienced in travelers, saw the armor and the lance and decided to play along; it is cheaper, he is reported to have told his wife, than arguing.',
+        'Two women in the yard — described by the chronicler with the frankness of his century — were addressed by the hidalgo as “Doña.” They had never been called Doña before. One, Tolosa, later admitted that she had cried a little.',
+        'The horse-trough held drinking water for mules.'
+      ]
+    },
+    choices: [
+      {
+        id: 1,
+        label: 'Keep the vigil of arms at the trough, all night.',
+        knight: ['I take up my armor in my arms and lay it on the rim of the trough. I pace the courtyard, lance in hand. At some point before dawn a muleteer approaches the trough to water his animals; he puts his hand on my armor to move it. I strike him with the lance. A second comes; I strike him also. The castellan emerges in a nightshirt and begs me to be knighted at once, before matters worsen.'],
+        chronicle: ['The muleteers, needing water for their animals in the ordinary course of trade, were each in turn felled by the hidalgo’s lance. The innkeeper, assessing the situation, proposed an accelerated ceremony. A ledger of hay and straw was produced; the innkeeper read from it with visible gravity. Tolosa buckled the spur. She thanked the hidalgo for the honor.']
+      },
+      {
+        id: 2,
+        label: "Accept the innkeeper's offer of a quick ceremony.",
+        knight: ['I accept. A ceremony is made by what those inside it believe is a ceremony. The castellan reads from his book of ordinances. Doña Tolosa buckles on my sword. Doña Molinera fastens my spurs. They do it as though they have done it a hundred times. They have not. It does not matter.'],
+        chronicle: ['The innkeeper, reading aloud from a ledger of straw deliveries and stabling fees with the solemnity of an ecclesiastic, pronounced the hidalgo a knight. Tolosa, still wiping her eyes, buckled the sword as she had been shown. Molinera, biting her lower lip to keep from laughing, fastened the spurs. The muleteers watched from the loft.']
+      },
+      {
+        id: 3,
+        label: 'Sit with the muleteers. Drink. Let the ceremony wait.',
+        knight: ['I accept a cup from one of them. They are rough men but they have ridden many leagues. One says he has been to Flanders. I tell them of Amadís. They listen, or seem to. I remember very little of that night.'],
+        chronicle: ['The hidalgo, who had eaten nothing since morning, accepted a cup of thin wine and then another. The muleteers, unsure whether he was noble or mad or both, treated him politely. In the morning, when he would not leave without being knighted, the innkeeper improvised the ceremony at the horse-trough with whatever was at hand.']
+      }
+    ],
+    outro: {
+      knight: ['Knighted, named, sworn. The road from here is the road the order was made for. Dulcinea will know before the week is out that her servant is a knight.'],
+      chronicle: ['The hidalgo paid no reckoning, on the grounds that knights-errant pay no reckoning anywhere, and rode out shortly after dawn. The innkeeper, philosophical, did not pursue him.']
+    }
+  },
+
+  {
+    id: 'I.8',
+    title: 'The Windmills',
+    subtitle: 'the plain of Montiel, midday',
+    illustId: 'illus-windmills',
+    entry: {
+      knight: [
+        'The plain opens before me. Far ahead — thirty, forty giants, long of arm, turning their massive limbs against the sky. Fortune, which has guided me since the morning I rode out, has brought me to the war my order was made for. I will not waste it.',
+        'I will not be lectured on what I see. Sancho is an honest man but his eye is an honest man’s eye. He sees only what can be pressed for flour.'
+      ],
+      chronicle: [
+        'The hidalgo rides south toward Puerto Lápice. Thirty or forty windmills stand along the plain. A breeze has risen; the sails turn.',
+        'Sancho Panza, rising in his stirrups: <em>“Señor, what giants? Those are windmills. What you call their arms are their sails, which turned by the wind make the millstone go.”</em>',
+        'Sancho waits for an answer.'
+      ]
+    },
+    choices: [
+      {
+        id: 1,
+        label: 'Commend yourself to Dulcinea and charge.',
+        knight: ['I commend myself, in the fullness of my heart, to the lady Dulcinea — to aid me in such a pass. I spur Rocinante forward. The giant lifts his great arm against my lance. I strike. The lance shatters. The horse falls. Sancho is shouting something about mills. The pain in my side is considerable. But the intention, which no blade of any sage can take from me, was to ride. Frestón. The sage Frestón has turned my giants into mills to cheat me of the glory. Let him. The victory he could not prevent is mine: I rode.'],
+        chronicle: ['He spurred the horse forward. Rocinante, old and thin, went as willingly as its rider asked. The blade of the nearest mill caught the lance, snapped it clean, and lifted horse and rider together into the air. Sancho, running up: <em>Señor. Señor. God help us. I told you, señor. I told you they were mills.</em> The hidalgo rose slowly, favoring his right side.']
+      },
+      {
+        id: 2,
+        label: 'Ride past. Remember the day you did not charge.',
+        knight: ['I ride past. Sancho’s voice is in my ear and my rib is still sound; both of these are new. But a day will come when I will remember the plain of Montiel, and what I failed to ride down, and the memory will be the ache the rib would have been. The order of knight-errantry is not a matter of one mill or thirty. It is a matter of the next one.'],
+        chronicle: ['The hidalgo rode past the mills without incident. Sancho, visibly relieved, fell in beside him. The two of them rode south in silence for a long time. By late afternoon they had crossed the plain.']
+      },
+      {
+        id: 3,
+        label: 'Dismount and ask a passing traveler what they see.',
+        knight: ['I stop a passing muleteer. I ask him. He says, “Mills, señor. They have always been mills.” I thank him. The world agrees with Sancho; the world has always agreed with Sancho. That is why the order was made in the first place.'],
+        chronicle: ['A muleteer passing on the road, asked the question and giving the obvious answer, watched the hidalgo thank him gravely and ride on. The muleteer later told the story at the next inn, where it was laughed at, and then repeated, and then laughed at again.']
+      }
+    ],
+    outro: {
+      knight: ['I ride on. The pain in my side — or the pain where the pain would have been — is considerable, but the day is mine. Ahead: the royal highway. Ahead: the next thing.'],
+      chronicle: ['They rode south that afternoon without further incident. Toward evening they heard, on the royal highway, the sound of chains.']
+    }
+  },
+
+  {
+    id: 'I.22',
+    title: 'The Galley Slaves',
+    subtitle: 'the royal highway, late afternoon',
+    illustId: 'illus-galley-slaves',
+    entry: {
+      knight: [
+        'Twelve men on a chain, walking in the middle of the road between two mounted guards. I ride up and stop the convoy. I interrogate each prisoner about his crime. I do not dispute the individual guilts; I dispute the principle. God has made men free. The crown’s galleys have no privilege over that freedom higher than the order I have sworn. The order of knight-errantry exists, in part, to interpose against such forcings.'
+      ],
+      chronicle: [
+        'On the royal highway, moving south, a chain of twelve prisoners bound for the galleys at Cartagena. Two guards of the Santa Hermandad mounted, four on foot. The hidalgo rides up and stops the convoy, dismounts, questions each prisoner in turn.',
+        'Sancho, quietly, at the hidalgo’s elbow: <em>“Señor, the Santa Hermandad is not a windmill.”</em>',
+        'The prisoner Ginés de Pasamonte, last in line, addresses the hidalgo directly: his autobiography is already written, he says, and superior to that of Lazarillo de Tormes. He awaits only a patron.',
+        'One of the guards, in a bored official voice: <em>“This is a royal transport. Move on.”</em>'
+      ]
+    },
+    choices: [
+      {
+        id: 1,
+        label: 'Cut the chain. They are free men.',
+        knight: ['I draw the sword. The chain parts. The prisoners run. The guards run. I stand on the road. Ginés approaches, bows, takes my cloak from the saddle, and runs. A rock strikes my cheek. Another. The sky is very high. I speak to no one: the principle is not lessened because those in whose name I acted were ungrateful. I said what I said before I was struck. I stand on it.'],
+        chronicle: ['Official notice, Santa Hermandad, posted that evening at the inn at Puerto Lápice: an unidentified armed man of approximately fifty years of age interfered this afternoon with the royal transport of twelve galley-bound prisoners. The prisoners absconded. The unknown man was subsequently stoned by those he had freed and is said to be proceeding south. A warrant is issued.']
+      },
+      {
+        id: 2,
+        label: 'Argue the principle with the guards. Let them pass.',
+        knight: ['I make my case. The guards listen. One of them smiles — at the rhetoric, not at the principle. They ride on with their chain. The prisoners are carried away. Sancho, relieved, says a brief prayer for us. I repeat what I said, for the road, for the chronicle: God has made men free.'],
+        chronicle: ['The hidalgo, to the guards’ visible surprise, delivered a sustained speech of some minutes on the question of human freedom before God. The guards, who had a schedule to keep, heard him out with the rough courtesy of men who are not paid to engage in philosophy. When he had finished, the senior guard saluted him ironically and moved the convoy on.']
+      },
+      {
+        id: 3,
+        label: 'Say nothing. Ride past.',
+        knight: ['I say nothing. Sancho is relieved. The chain passes. I ride for some hours without speaking. There is no moral victory in a silence of this kind. The order of knight-errantry permits prudence; that is not the same as saying prudence is owed. The silence will follow me.'],
+        chronicle: ['The hidalgo, to Sancho’s surprise and relief, made no move to intervene. He rode past the convoy and for the rest of the afternoon said almost nothing. Sancho, looking sidelong at his master, later said to the innkeeper at Puerto Lápice that the señor had not been himself.']
+      }
+    ],
+    outro: {
+      knight: ['I ride on. The light is falling. Ahead is a cave, a mountain, and — I am told — a man who is waiting in the sierra to go mad for love.'],
+      chronicle: ['By dusk the hidalgo and his squire had reached the foot of the Sierra Morena. An innkeeper’s boy, passing them on the road, later reported that the tall thin man had seemed tired, and that the short one on the donkey had been arguing with him about whether it was permissible to eat.']
+    }
+  },
+
+  {
+    id: 'I.49–50',
+    title: 'The Cage and the Canon',
+    subtitle: 'on the road home, in the ox-cart cage',
+    illustId: 'illus-cage-canon',
+    entry: {
+      knight: [
+        'They are carrying me home in a cage drawn by oxen and I am not ashamed. The parish priest and the barber, old friends, have arranged this as for my good. The Canon of Toledo rides beside the cart. He is an educated man. He has been telling me, for the last league, that the books of chivalry I have read are false. He asks if I have anything to say in their defense.',
+        'I say: Since I became a knight-errant I have been brave, courteous, liberal, well-bred, generous, polite, daring, patient, long-suffering. I have seen, by reading, whole countries of vivid beauty that drew me out into the world. I have been, in a word, richer in my fifty-first year than I was in my fiftieth. Whatever else you call it — madness, folly, a delay against death — these books have given me a life.'
+      ],
+      chronicle: [
+        'The hidalgo is returning home, at the arrangement of the parish priest of his village, inside a wooden cage on an ox-drawn cart. The Canon of Toledo, met on the road, has joined the party and has been, for some time, conducting a learned disputation against the chivalric romances. The priest and the barber ride alongside, relieved that the hidalgo seems calmer than he has been in weeks.',
+        'The Canon now addresses the hidalgo directly: <em>“My friend, you are a man of parts, and on every subject outside chivalry you speak with the sound judgment of an intelligent man. I should like to hear you say what you can say in their defense.”</em>',
+        'He waits for an answer.'
+      ]
+    },
+    choices: [
+      {
+        id: 1,
+        label: 'Deliver the full defense.',
+        knight: ['I say everything. I do not hurry. I tell the Canon that a man in the middle of life who has refused to spend the rest of it doing nothing is not a man who has lost anything. I tell him that the books gave me the grammar of that refusal, and that no other books in my father’s house could have done so. I tell him I know the books are not literally true. I tell him it is the smaller question. When I finish, the road has not moved.'],
+        chronicle: [
+          'The hidalgo delivered his reply at length, without hesitation, and, as the chronicler notes, with the sound judgment of an intelligent man. The Canon, who had expected perhaps a rote defense, listened in visible surprise. When the hidalgo had finished, the Canon was silent for a long time.',
+          '<em>“My friend, on every subject outside chivalry you have always spoken with the sound judgment of an intelligent man. On this subject — I had not expected to be shaken. You have shaken me. I concede it.”</em>'
+        ]
+      },
+      {
+        id: 2,
+        label: 'Concede. Ask to be unshackled. Promise to go home quietly.',
+        knight: ['I concede. Not because the Canon is right — he is educated but he has not read what I have read — but because a cage is not the place from which a knight-errant argues his last argument. I ask to be unshackled, on my word that I will go home and rest. The Canon agrees. The cage is unlocked. We ride on. Tomorrow is a new morning. Tomorrow I will ride again.'],
+        chronicle: ['The hidalgo conceded the argument to the Canon with every appearance of courteous resignation, and on his word that he would go home quietly, the cage was unlocked. The priest, relieved, let the matter rest. They arrived at the village in the afternoon. The niece and the housekeeper wept.']
+      },
+      {
+        id: 3,
+        label: 'Fall silent.',
+        knight: ['I say nothing. There is no sentence I could finish in this cage that would not be misheard. The Canon is an honest man and an educated man, and he has asked an honest question; but there is a kind of question that can only be answered by the life one has lived in spite of the question. I watch the road.'],
+        chronicle: ['The hidalgo made no reply. The Canon, after a respectful pause, resumed the disputation on his own — laying out, for the edification of the priest and barber, the several reasons why the chivalric romances were false. The hidalgo listened. His expression did not change. The priest later told his wife he had never seen the man more lucid.']
+      }
+    ],
+    outro: {
+      knight: ['Part the First ends. I do not. The chronicler Cide Hamete Benengeli, I am told, keeps what comes next. When you read it, remember: I rode.'],
+      chronicle: ['The party reached the hidalgo’s village the next afternoon. The niece and the housekeeper were waiting at the gate. Here ends the First Part of the history of the ingenious gentleman Don Quijote de la Mancha, by Miguel de Cervantes Saavedra, published at Madrid in the year of Our Lord 1605.']
+    }
+  }
+];
+
+/* ──────────────────────────────────────────────────────
+   STATE
+────────────────────────────────────────────────────── */
+const SAVE_KEY = 'knights-road-save-v1';
+
+let S = {
+  screen:       'title', // 'title' | 'game' | 'closing'
+  chIdx:        0,
+  step:         'entry', // 'entry' | 'choice_made' | 'outro'
+  choiceMade:   null,
+  settings: {
+    motion:    false,
+    contrast:  false,
+    bigFont:   false
+  }
+};
+
+function saveSettings() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ settings: S.settings })); } catch(e) {}
+}
+function loadSettings() {
+  try {
+    const d = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    if (d.settings) S.settings = Object.assign(S.settings, d.settings);
+  } catch(e) {}
+}
+
+/* ──────────────────────────────────────────────────────
+   DOM HELPERS
+────────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+
+function showScreen(name) {
+  ['title-screen','game-screen','closing-screen'].forEach(id => {
+    const el = $(id);
+    el.style.display = '';
+    el.classList.remove('screen'); // ensure not hidden by CSS
+    if (id === name + '-screen' || id === name) {
+      el.style.display = 'flex';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+  // Title screen is flex already via CSS when active
+  if (name === 'title') {
+    $('title-screen').style.display = 'flex';
+    $('game-screen').style.display = 'none';
+    $('closing-screen').style.display = 'none';
+  } else if (name === 'game') {
+    $('title-screen').style.display = 'none';
+    $('game-screen').style.display = 'flex';
+    $('closing-screen').style.display = 'none';
+  } else if (name === 'closing') {
+    $('title-screen').style.display = 'none';
+    $('game-screen').style.display = 'none';
+    $('closing-screen').style.display = 'flex';
+  }
+}
+
+function noMotion() {
+  return S.settings.motion ||
+    (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
+
+function makeSvgUse(illustId) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" role="img" aria-hidden="true"><use href="#${illustId}"/></svg>`;
+}
+
+function paragraphsHtml(arr) {
+  return arr.map(p => `<p>${p}</p>`).join('');
+}
+
+function appendBlock(bodyId, paragraphs, animate) {
+  const body = $(bodyId);
+  const div = document.createElement('div');
+  div.className = 'tb';
+  div.innerHTML = paragraphsHtml(paragraphs);
+  if (animate && !noMotion()) div.classList.add('fade-in');
+  body.appendChild(div);
+}
+
+function clearColumns() {
+  $('k-body').innerHTML = '';
+  $('c-body').innerHTML = '';
+}
+
+/* ──────────────────────────────────────────────────────
+   CHAPTER INTRO ANIMATION
+────────────────────────────────────────────────────── */
+function showChapterIntro(ch, callback) {
+  const intro = $('ch-intro');
+  $('ci-illus-wrap').innerHTML = makeSvgUse(ch.illustId);
+  $('ci-num').textContent = 'Chapter ' + ch.id;
+  $('ci-title').textContent = ch.title;
+  $('ci-subtitle').textContent = ch.subtitle;
+
+  intro.classList.remove('hidden', 'fading');
+  intro.style.display = 'flex';
+
+  if (noMotion()) {
+    intro.style.display = 'none';
+    intro.classList.add('hidden');
+    callback();
+    return;
+  }
+
+  setTimeout(() => {
+    intro.classList.add('fading');
+    intro.addEventListener('animationend', function done() {
+      intro.removeEventListener('animationend', done);
+      intro.style.display = 'none';
+      intro.classList.add('hidden');
+      callback();
+    }, { once: true });
+  }, 1200);
+}
+
+/* ──────────────────────────────────────────────────────
+   CHOICE BAR RENDERING
+────────────────────────────────────────────────────── */
+function renderChoiceButtons(ch) {
+  $('cb-prompt').textContent = 'What do you do?';
+  const container = $('cb-contents');
+  container.innerHTML = `<div class="cb-btns">
+    ${ch.choices.map(c =>
+      `<button class="ch-btn" data-n="${c.id}" aria-label="Choice ${c.id}: ${c.label}">${c.label}</button>`
+    ).join('')}
+  </div>`;
+  container.querySelectorAll('.ch-btn').forEach(btn => {
+    btn.addEventListener('click', () => makeChoice(parseInt(btn.dataset.n)));
+  });
+}
+
+function renderContinueButton() {
+  $('cb-prompt').textContent = '';
+  $('cb-contents').innerHTML = `<div class="cb-action"><button class="btn btn-fill" id="btn-continue">Continue</button></div>`;
+  $('btn-continue').addEventListener('click', pressContinue);
+  $('btn-continue').focus();
+}
+
+function renderNextChapterButton() {
+  const ch = CHAPTERS[S.chIdx];
+  const isLast = S.chIdx >= CHAPTERS.length - 1;
+  $('cb-prompt').textContent = '';
+  $('cb-contents').innerHTML = isLast
+    ? `<div class="cb-action"><button class="btn btn-fill" id="btn-next">Closing →</button></div>`
+    : `<div class="cb-action"><button class="btn btn-fill" id="btn-next">Next Chapter →</button></div>`;
+  $('btn-next').addEventListener('click', advanceChapter);
+  $('btn-next').focus();
+}
+
+/* ──────────────────────────────────────────────────────
+   GAME FLOW
+────────────────────────────────────────────────────── */
+function startChapter(idx) {
+  S.chIdx      = idx;
+  S.step       = 'entry';
+  S.choiceMade = null;
+
+  const ch = CHAPTERS[idx];
+
+  showScreen('game');
+  clearColumns();
+
+  // Update header
+  $('ch-header-num').textContent  = 'Chapter ' + ch.id;
+  $('ch-header-name').textContent = ch.title;
+  $('ch-thumb-wrap').innerHTML    = makeSvgUse(ch.illustId);
+
+  // Show intro, then populate entry
+  showChapterIntro(ch, () => {
+    appendBlock('k-body', ch.entry.knight, true);
+    appendBlock('c-body', ch.entry.chronicle, true);
+    renderChoiceButtons(ch);
+    $('game-main').scrollTop = 0;
+  });
+}
+
+function makeChoice(n) {
+  if (S.step !== 'entry') return;
+  S.step       = 'choice_made';
+  S.choiceMade = n;
+
+  const ch     = CHAPTERS[S.chIdx];
+  const choice = ch.choices.find(c => c.id === n);
+
+  // Mark button as picked
+  document.querySelectorAll('.ch-btn').forEach(b => {
+    b.disabled = true;
+    if (parseInt(b.dataset.n) === n) b.classList.add('picked');
+  });
+
+  setTimeout(() => {
+    appendBlock('k-body', choice.knight,   true);
+    appendBlock('c-body', choice.chronicle, true);
+    renderContinueButton();
+  }, noMotion() ? 0 : 80);
+}
+
+function pressContinue() {
+  if (S.step !== 'choice_made') return;
+  S.step = 'outro';
+
+  const ch = CHAPTERS[S.chIdx];
+  appendBlock('k-body', ch.outro.knight,   true);
+  appendBlock('c-body', ch.outro.chronicle, true);
+  renderNextChapterButton();
+}
+
+function advanceChapter() {
+  if (S.chIdx >= CHAPTERS.length - 1) {
+    showClosing();
+  } else {
+    startChapter(S.chIdx + 1);
+  }
+}
+
+function showClosing() {
+  S.screen = 'closing';
+  showScreen('closing');
+}
+
+function restartGame() {
+  closeSettings();
+  S.chIdx = 0;
+  S.step  = 'entry';
+  S.choiceMade = null;
+  showScreen('title');
+}
+
+/* ──────────────────────────────────────────────────────
+   SETTINGS
+────────────────────────────────────────────────────── */
+function applySettings() {
+  document.body.classList.toggle('no-motion', S.settings.motion);
+  document.body.classList.toggle('hi-con',    S.settings.contrast);
+  document.body.classList.toggle('big-font',  S.settings.bigFont);
+
+  $('tog-motion').checked   = S.settings.motion;
+  $('tog-contrast').checked = S.settings.contrast;
+  $('tog-font').checked     = S.settings.bigFont;
+
+  saveSettings();
+}
+
+function openSettings()  { $('settings').classList.add('open'); }
+function closeSettings() { $('settings').classList.remove('open'); }
+function toggleSettings() {
+  $('settings').classList.contains('open') ? closeSettings() : openSettings();
+}
+
+/* ──────────────────────────────────────────────────────
+   MODALS
+────────────────────────────────────────────────────── */
+function openModal(id)  { $(id).classList.add('open'); }
+function closeModal(id) { $(id).classList.remove('open'); }
+
+/* ──────────────────────────────────────────────────────
+   KEYBOARD CONTROLS
+────────────────────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  if ($('htr-modal').classList.contains('open') || $('analysis-modal').classList.contains('open')) {
+    if (e.key === 'Escape') { closeModal('htr-modal'); closeModal('analysis-modal'); }
+    return;
+  }
+
+  const tag = document.activeElement && document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+  switch(e.key) {
+    case 'Escape':
+      toggleSettings();
+      break;
+    case 'r': case 'R':
+      restartGame();
+      break;
+    case '1':
+      if (S.step === 'entry') makeChoice(1);
+      break;
+    case '2':
+      if (S.step === 'entry') makeChoice(2);
+      break;
+    case '3':
+      if (S.step === 'entry') makeChoice(3);
+      break;
+    case 'Enter': case ' ':
+      if (S.step === 'choice_made') {
+        const cont = $('btn-continue');
+        if (cont) cont.click();
+      } else if (S.step === 'outro') {
+        const nxt = $('btn-next');
+        if (nxt) nxt.click();
+      }
+      break;
+  }
+});
+
+/* ──────────────────────────────────────────────────────
+   EVENT WIRING
+────────────────────────────────────────────────────── */
+$('btn-begin').addEventListener('click', () => startChapter(0));
+$('btn-htr').addEventListener('click', () => openModal('htr-modal'));
+
+$('htr-close').addEventListener('click', () => closeModal('htr-modal'));
+$('htr-close-btn').addEventListener('click', () => closeModal('htr-modal'));
+$('htr-modal').addEventListener('click', e => { if (e.target === $('htr-modal')) closeModal('htr-modal'); });
+
+$('an-close').addEventListener('click', () => closeModal('analysis-modal'));
+$('an-close-btn').addEventListener('click', () => closeModal('analysis-modal'));
+$('analysis-modal').addEventListener('click', e => { if (e.target === $('analysis-modal')) closeModal('analysis-modal'); });
+
+$('btn-restart').addEventListener('click', restartGame);
+$('btn-settings-open').addEventListener('click', toggleSettings);
+$('btn-restart-cl').addEventListener('click', restartGame);
+
+$('btn-play-again').addEventListener('click', restartGame);
+$('btn-read-analysis').addEventListener('click', () => openModal('analysis-modal'));
+
+// Close settings on outside click
+document.addEventListener('click', e => {
+  const panel = $('settings');
+  const trigger = $('btn-settings-open');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== trigger) {
+    closeSettings();
+  }
+});
+
+// Settings toggles
+$('tog-motion').addEventListener('change', () => { S.settings.motion   = $('tog-motion').checked;   applySettings(); });
+$('tog-contrast').addEventListener('change', () => { S.settings.contrast = $('tog-contrast').checked; applySettings(); });
+$('tog-font').addEventListener('change', () => { S.settings.bigFont  = $('tog-font').checked;    applySettings(); });
+
+/* ──────────────────────────────────────────────────────
+   INIT
+────────────────────────────────────────────────────── */
+loadSettings();
+applySettings();
+showScreen('title');
+</script>
+</body>
+</html>
