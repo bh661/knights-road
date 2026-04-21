@@ -549,6 +549,68 @@ body.big-font { --sz-k: 19px; --sz-c: 17px; }
     <path d="M418 256 Q430 244 426 258 Q422 268 415 263Z" fill="#1a0f08"/>
   </symbol>
 
+  <!-- I.25 The Sierra Morena: mountain ridge, pines, shirtless figure mid-handspring, donkey+rider descending, armor on ledge -->
+  <symbol id="illus-sierra-morena" viewBox="0 0 480 320">
+    <title>Chapter I.25 — The knight does penance in the Sierra Morena.</title>
+    <!-- Sky -->
+    <rect width="480" height="320" fill="#8fa8c0"/>
+    <!-- Far mountain range -->
+    <path d="M0 200 Q60 150 130 170 Q200 190 260 140 Q320 90 380 120 Q430 145 480 110 L480 320 L0 320Z" fill="#3a2818"/>
+    <!-- Near ridge/ground -->
+    <path d="M0 240 Q80 210 160 225 Q240 240 320 218 Q380 205 480 220 L480 320 L0 320Z" fill="#1a0f08"/>
+    <!-- Ground -->
+    <rect y="275" width="480" height="45" fill="#160a04"/>
+    <!-- Three pine trees on ridge -->
+    <!-- Pine 1 -->
+    <polygon points="195,195 204,230 186,230" fill="#0d0804"/>
+    <polygon points="195,178 206,208 184,208" fill="#0d0804"/>
+    <polygon points="195,163 207,192 183,192" fill="#0d0804"/>
+    <rect x="192" y="230" width="6" height="12" fill="#0d0804"/>
+    <!-- Pine 2 -->
+    <polygon points="230,188 241,225 219,225" fill="#0d0804"/>
+    <polygon points="230,170 243,202 217,202" fill="#0d0804"/>
+    <polygon points="230,155 244,186 216,186" fill="#0d0804"/>
+    <rect x="227" y="225" width="6" height="14" fill="#0d0804"/>
+    <!-- Pine 3 (smaller, farther) -->
+    <polygon points="265,200 273,228 257,228" fill="#0d0804"/>
+    <polygon points="265,185 274,211 256,211" fill="#0d0804"/>
+    <polygon points="265,173 275,198 255,198" fill="#0d0804"/>
+    <rect x="262" y="228" width="5" height="10" fill="#0d0804"/>
+    <!-- Ledge/rock platform (center) -->
+    <path d="M148 248 Q175 238 210 242 Q235 244 248 240 L248 260 Q220 264 185 262 Q162 260 148 258Z" fill="#2a1a0a"/>
+    <!-- Armor abandoned on ledge (helmet + cuirass shape) -->
+    <ellipse cx="162" cy="248" rx="10" ry="8" fill="#4a3020"/>
+    <rect x="155" y="253" width="14" height="8" rx="2" fill="#4a3020"/>
+    <!-- Figure mid-handspring (one hand planted on rock, legs up) -->
+    <!-- Body/torso (angled, shirt loose) -->
+    <rect x="296" y="218" width="14" height="22" rx="3" fill="#1a0f08" transform="rotate(-50 296 218)"/>
+    <!-- Head (below, near the planted hand) -->
+    <ellipse cx="284" cy="238" rx="9" ry="9" fill="#1a0f08"/>
+    <!-- Arm planted on rock -->
+    <line x1="290" y1="244" x2="278" y2="254" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <!-- Hand/fist on rock -->
+    <circle cx="276" cy="255" r="5" fill="#1a0f08"/>
+    <!-- Legs in the air (two legs up-left) -->
+    <line x1="304" y1="210" x2="298" y2="192" stroke="#1a0f08" stroke-width="6" stroke-linecap="round"/>
+    <line x1="312" y1="212" x2="320" y2="194" stroke="#1a0f08" stroke-width="6" stroke-linecap="round"/>
+    <!-- Other arm bracing -->
+    <line x1="290" y1="228" x2="274" y2="232" stroke="#1a0f08" stroke-width="5" stroke-linecap="round"/>
+    <!-- Rock the figure handsprings on -->
+    <ellipse cx="280" cy="258" rx="22" ry="8" fill="#2a1a0a"/>
+    <!-- Donkey + rider descending path (lower right) -->
+    <path d="M370 270 Q410 255 448 262 L448 280 Q410 272 370 285Z" fill="#1a0f08" opacity="0.6"/>
+    <!-- Donkey body -->
+    <ellipse cx="408" cy="272" rx="22" ry="10" fill="#1a0f08"/>
+    <!-- Donkey head+neck -->
+    <path d="M389 268 Q382 258 387 252 Q392 247 398 252 Q400 262 393 268Z" fill="#1a0f08"/>
+    <!-- Donkey ears -->
+    <line x1="385" y1="252" x2="381" y2="244" stroke="#1a0f08" stroke-width="3" stroke-linecap="round"/>
+    <line x1="389" y1="251" x2="387" y2="242" stroke="#1a0f08" stroke-width="3" stroke-linecap="round"/>
+    <!-- Rider (Sancho, stocky) on donkey -->
+    <ellipse cx="410" cy="260" rx="8" ry="7" fill="#1a0f08"/>
+    <rect x="403" y="265" width="14" height="14" rx="3" fill="#1a0f08"/>
+  </symbol>
+
 </svg>
 
 <!-- ═══════════════════════════════════════════════════
@@ -888,6 +950,48 @@ const CHAPTERS = [
     outro: {
       knight: ['I ride on. The light is falling. Ahead is a cave, a mountain, and — I am told — a man who is waiting in the sierra to go mad for love.'],
       chronicle: ['By dusk the hidalgo and his squire had reached the foot of the Sierra Morena. An innkeeper’s boy, passing them on the road, later reported that the tall thin man had seemed tired, and that the short one on the donkey had been arguing with him about whether it was permissible to eat.']
+    }
+  },
+
+  {
+    id: 'I.25',
+    title: 'The Sierra Morena',
+    subtitle: 'a hideout in the mountains, in the open air',
+    illustId: 'illus-sierra-morena',
+    entry: {
+      knight: [
+        'We have come up into the sierra. There is no one on these paths. I have put off the armor. I am in shirt and breeches. I have chosen this place because Amadís de Gaula, when his lady turned from him, went into the Peña Pobre in just such a solitude and did penance; and Orlando at Roncesvalles, having lost Angélica, tore up trees and ran naked through the woods. These are the two models.',
+        'Here is what I want to say plainly to my squire before he goes. Amadís had a cause. Orlando had a cause. I have none. Dulcinea has never wronged me. Dulcinea has never, to my knowledge, thought of me. The merit of doing penance with cause is small. The merit of doing penance without cause — of choosing it, because one has read the life and wishes to live inside it — is greater. That is precisely why I will do it.'
+      ],
+      chronicle: [
+        'The hidalgo and his squire, having escaped the Santa Hermandad after the matter of the galley chain, have climbed into the Sierra Morena. The hidalgo has stripped to his shirt. He has said twice that he intends to do penance on this mountain in the manner of Amadís de Gaula on the Peña Pobre and Orlando at Roncesvalles. The squire, Sancho Panza, is listening.',
+        'Sancho, eventually: <em>"Señor — if your Dulcinea has not wronged you, and has never, by your own account, answered a letter of yours, then what cause have you to go mad for her at all?"</em>',
+        'The hidalgo, evenly: <em>"That, precisely, is the point. To go mad with cause deserves no thanks. To go mad without one — that is the thing."</em>'
+      ]
+    },
+    choices: [
+      {
+        id: 1,
+        label: 'Perform the full penance. Handsprings in the shirt, as the books prescribe.',
+        knight: ['I ask Sancho to stand back and watch, so that he may report truly to Dulcinea what he saw. I take off my breeches. In shirt alone I turn two handsprings on the rocks, head down, heels up, showing the sky what the sky does not usually see from a man of fifty. I tear a young cork-oak from the ground and strike it against another. I compose, aloud, a sonnet to Dulcinea, and another, and a third. I tell Sancho: remember this. Tell her this. She asked for none of it; that is why it matters.'],
+        chronicle: ['The hidalgo, in his shirt alone, performed on the rocks of the sierra two complete handsprings, and, by Sancho\'s later account at the inn, a third that was less successful. He uprooted a small tree. He composed verses aloud. Sancho, having been told to witness the performance and report it faithfully to the lady at El Toboso, watched with an expression the chronicler does not attempt to describe. The handsprings, Sancho said afterwards, were the part he found hardest to forget.']
+      },
+      {
+        id: 2,
+        label: 'Skip the physical performance. Dictate the letter. Send Sancho.',
+        knight: ['I decide the handsprings are for a younger man, or for a man with a better audience than rocks. I dictate the letter to Dulcinea instead. Sancho writes, or pretends to — I suspect the page is blank; no matter. I say the words aloud as though she were listening from behind the next stone. I tell her I am mad for her on purpose. I tell her the penance is an argument about the kind of life a man chooses. I send Sancho with the letter. I remain in the shirt. The shirt is the point.'],
+        chronicle: ['The hidalgo, after some deliberation, chose to omit the more physical elements of the penance and dictated instead a letter to the lady Dulcinea del Toboso. Sancho, who could neither read nor reliably write, received the dictation and left immediately for El Toboso with what he later admitted was an empty saddlebag. The hidalgo remained on the mountain in his shirt, by his own stated choice.']
+      },
+      {
+        id: 3,
+        label: 'Sit down on a rock. Reconsider. Then continue anyway.',
+        knight: ['I sit. Sancho sits with me. For a quarter of an hour I do not speak. I can see, from where I am sitting, the road we came up by, and beyond it the plain, and beyond that the village I have not seen since I rode out. I could turn around. No one is holding me here but the book I have read. That is the whole reason I am here. I stand up. I continue.'],
+        chronicle: ['The hidalgo sat for some time without speaking on a rock facing the plain. Sancho, reading the silence as a possible return to reason, waited hopefully. After about a quarter of an hour the hidalgo rose, removed his breeches, and resumed the penance he had announced. Sancho departed shortly afterwards for El Toboso with the letter, leaving his master in a shirt in the mountains.']
+      }
+    ],
+    outro: {
+      knight: ['Sancho is on the road with the letter. I am alone on the Peña Pobre I have chosen to call this rock. A knight cannot be known to have chosen what he chose unless someone can later report that he chose it. That is why Sancho had to see.'],
+      chronicle: ['Sancho Panza rode out of the sierra that afternoon, on a donkey, with what he described to the first muleteer he met as "a letter of great importance." The hidalgo, left behind on the mountain, was eventually found by the parish priest and the barber of his village, who had ridden out after him. After a long and ingenious deception involving a princess, a giant, and a false kingdom called Micomicón, they prevailed upon him to come down. He came down in a wooden cage on an ox-drawn cart. The chronicler, for reasons of space, compresses the journey here.']
     }
   },
 
