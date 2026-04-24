@@ -80,6 +80,7 @@ body { background: var(--bg); color: var(--k-text); font-family: var(--font-k); 
 #ch-intro.fading { animation: fadeOut 350ms ease-out forwards; }
 .ci-illus { width: 60%; max-width: 460px; margin-bottom: 28px; }
 .ci-illus svg { width: 100%; height: auto; display: block; }
+.ci-img { display: block; margin: 0 auto; max-width: 100%; max-height: 320px; height: auto; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,.15); filter: sepia(0.08); }
 .ci-num {
   font-family: var(--font-c); font-size: .7rem;
   letter-spacing: .14em; text-transform: uppercase;
@@ -790,6 +791,7 @@ const CHAPTERS = [
     title: 'The First Sally',
     subtitle: 'a village of La Mancha, before dawn',
     illustId: 'illus-first-sally',
+    illustImg: 'images/chapter_1_first_sally.png',
     entry: {
       knight: [
         'It is not yet light. The housekeeper is asleep. My niece is asleep. The nag is saddled. I am in armor my grandfather last wore for a funeral, and the armor fits me better than it fit him.',
@@ -804,19 +806,19 @@ const CHAPTERS = [
     },
     choices: [
       {
-        id: 1,
+        id: 1, weight: +1,
         label: 'Ride. The day is already yours.',
         knight: ['I ride out through the yard gate. No one sees me go. The road is the color of old bread. Behind me: a house, a niece, forty years of lentils. Ahead: a road.'],
         chronicle: ['The hidalgo rode out at a slow walk through the yard gate. A neighbor, rising to feed his chickens, saw him pass and later reported that the old gentleman was in armor and seemed to be going somewhere.']
       },
       {
-        id: 2,
+        id: 2, weight: -1,
         label: 'Sit for one more hour at the window. Think.',
         knight: ['I sit. One more lentil Friday. One more. The gray turns to gold against the whitewash. There is nothing in this window I have not memorized. The horse below is ready. I have never been the man who does not ride.'],
         chronicle: ['The hidalgo sat for a quarter of an hour at the upper window, watching the yard. At about the quarter to five, by the chronicler\'s reckoning, he rose from the window, descended the stair, and rode out.']
       },
       {
-        id: 3,
+        id: 3, weight: 0,
         label: 'Write a letter first. To the barber. Tell someone where you are going.',
         knight: ['I write. I tear it up. I write again. The words the barber would need do not exist yet. I leave the paper on the desk with a line on it — “I have gone to do what I have always meant to do” — and I ride.'],
         chronicle: ['A single sheet was later found on the hidalgo’s writing-desk. It bore one line, in the hand of a man writing quickly. The housekeeper could not read it. The parish priest, summoned, read it twice and did not comment.']
@@ -833,6 +835,7 @@ const CHAPTERS = [
     title: 'The Vigil at the Inn',
     subtitle: 'a venta on the highway, evening',
     illustId: 'illus-vigil-inn',
+    illustImg: 'images/chapter_2_vigil_at_the_inn.png',
     entry: {
       knight: [
         'The castle rises from the dust of the road with four towers and a deep moat. The castellan, a stout man of some breeding, greets me at the gate. Two noble ladies of the court — one called Doña Tolosa, one called Doña Molinera — attend upon me. I have not yet been knighted; until I am, I cannot in good conscience undertake the great adventures I was made for. Tonight I will keep the vigil of arms in the chapel of the castle, which is the courtyard by the horse-trough.'
@@ -846,19 +849,19 @@ const CHAPTERS = [
     choices: [
       {
         id: 1,
-        label: 'Keep the vigil of arms at the trough, all night.',
+        weight: +1, label: 'Keep the vigil of arms at the trough, all night.',
         knight: ['I take up my armor in my arms and lay it on the rim of the trough. I pace the courtyard, lance in hand. At some point before dawn a muleteer approaches the trough to water his animals; he puts his hand on my armor to move it. I strike him with the lance. A second comes; I strike him also. The castellan emerges in a nightshirt and begs me to be knighted at once, before matters worsen.'],
         chronicle: ['The muleteers, needing water for their animals in the ordinary course of trade, were each in turn felled by the hidalgo’s lance. The innkeeper, assessing the situation, proposed an accelerated ceremony. A ledger of hay and straw was produced; the innkeeper read from it with visible gravity. Tolosa buckled the spur. She thanked the hidalgo for the honor.']
       },
       {
         id: 2,
-        label: "Accept the innkeeper's offer of a quick ceremony.",
+        weight: 0, label: "Accept the innkeeper's offer of a quick ceremony.",
         knight: ['I accept. A ceremony is made by what those inside it believe is a ceremony. The castellan reads from his book of ordinances. Doña Tolosa buckles on my sword. Doña Molinera fastens my spurs. They do it as though they have done it a hundred times. They have not. It does not matter.'],
         chronicle: ['The innkeeper, reading aloud from a ledger of straw deliveries and stabling fees with the solemnity of an ecclesiastic, pronounced the hidalgo a knight. Tolosa, still wiping her eyes, buckled the sword as she had been shown. Molinera, biting her lower lip to keep from laughing, fastened the spurs. The muleteers watched from the loft.']
       },
       {
         id: 3,
-        label: 'Sit with the muleteers. Drink. Let the ceremony wait.',
+        weight: -1, label: 'Sit with the muleteers. Drink. Let the ceremony wait.',
         knight: ['I accept a cup from one of them. They are rough men but they have ridden many leagues. One says he has been to Flanders. I tell them of Amadís. They listen, or seem to. I remember very little of that night.'],
         chronicle: ['The hidalgo, who had eaten nothing since morning, accepted a cup of thin wine and then another. The muleteers, unsure whether he was noble or mad or both, treated him politely. In the morning, when he would not leave without being knighted, the innkeeper improvised the ceremony at the horse-trough with whatever was at hand.']
       }
@@ -874,6 +877,7 @@ const CHAPTERS = [
     title: 'The Windmills',
     subtitle: 'the plain of Montiel, midday',
     illustId: 'illus-windmills',
+    illustImg: 'images/chapter_3_windmills.png',
     entry: {
       knight: [
         'The plain opens before me. Far ahead — thirty, forty giants, long of arm, turning their massive limbs against the sky. Fortune, which has guided me since the morning I rode out, has brought me to the war my order was made for. I will not waste it.',
@@ -888,19 +892,19 @@ const CHAPTERS = [
     choices: [
       {
         id: 1,
-        label: 'Commend yourself to Dulcinea and charge.',
+        weight: +1, label: 'Commend yourself to Dulcinea and charge.',
         knight: ['I commend myself, in the fullness of my heart, to the lady Dulcinea — to aid me in such a pass. I spur Rocinante forward. The giant lifts his great arm against my lance. I strike. The lance shatters. The horse falls. Sancho is shouting something about mills. The pain in my side is considerable. But the intention, which no blade of any sage can take from me, was to ride. Frestón. The sage Frestón has turned my giants into mills to cheat me of the glory. Let him. The victory he could not prevent is mine: I rode.'],
         chronicle: ['He spurred the horse forward. Rocinante, old and thin, went as willingly as its rider asked. The blade of the nearest mill caught the lance, snapped it clean, and lifted horse and rider together into the air. Sancho, running up: <em>Señor. Señor. God help us. I told you, señor. I told you they were mills.</em> The hidalgo rose slowly, favoring his right side.']
       },
       {
         id: 2,
-        label: 'Ride past. Remember the day you did not charge.',
+        weight: -1, label: 'Ride past. Remember the day you did not charge.',
         knight: ['I ride past. Sancho’s voice is in my ear and my rib is still sound; both of these are new. But a day will come when I will remember the plain of Montiel, and what I failed to ride down, and the memory will be the ache the rib would have been. The order of knight-errantry is not a matter of one mill or thirty. It is a matter of the next one.'],
         chronicle: ['The hidalgo rode past the mills without incident. Sancho, visibly relieved, fell in beside him. The two of them rode south in silence for a long time. By late afternoon they had crossed the plain.']
       },
       {
         id: 3,
-        label: 'Dismount and ask a passing traveler what they see.',
+        weight: 0, label: 'Dismount and ask a passing traveler what they see.',
         knight: ['I stop a passing muleteer. I ask him. He says, “Mills, señor. They have always been mills.” I thank him. The world agrees with Sancho; the world has always agreed with Sancho. That is why the order was made in the first place.'],
         chronicle: ['A muleteer passing on the road, asked the question and giving the obvious answer, watched the hidalgo thank him gravely and ride on. The muleteer later told the story at the next inn, where it was laughed at, and then repeated, and then laughed at again.']
       }
@@ -916,6 +920,7 @@ const CHAPTERS = [
     title: 'The Galley Slaves',
     subtitle: 'the royal highway, late afternoon',
     illustId: 'illus-galley-slaves',
+    illustImg: 'images/chapter_4_galley_slaves.png',
     entry: {
       knight: [
         'Twelve men on a chain, walking in the middle of the road between two mounted guards. I ride up and stop the convoy. I interrogate each prisoner about his crime. I do not dispute the individual guilts; I dispute the principle. God has made men free. The crown’s galleys have no privilege over that freedom higher than the order I have sworn. The order of knight-errantry exists, in part, to interpose against such forcings.'
@@ -930,19 +935,19 @@ const CHAPTERS = [
     choices: [
       {
         id: 1,
-        label: 'Cut the chain. They are free men.',
+        weight: +1, label: 'Cut the chain. They are free men.',
         knight: ['I draw the sword. The chain parts. The prisoners run. The guards run. I stand on the road. Ginés approaches, bows, takes my cloak from the saddle, and runs. A rock strikes my cheek. Another. The sky is very high. I speak to no one: the principle is not lessened because those in whose name I acted were ungrateful. I said what I said before I was struck. I stand on it.'],
         chronicle: ['Official notice, Santa Hermandad, posted that evening at the inn at Puerto Lápice: an unidentified armed man of approximately fifty years of age interfered this afternoon with the royal transport of twelve galley-bound prisoners. The prisoners absconded. The unknown man was subsequently stoned by those he had freed and is said to be proceeding south. A warrant is issued.']
       },
       {
         id: 2,
-        label: 'Argue the principle with the guards. Let them pass.',
+        weight: 0, label: 'Argue the principle with the guards. Let them pass.',
         knight: ['I make my case. The guards listen. One of them smiles — at the rhetoric, not at the principle. They ride on with their chain. The prisoners are carried away. Sancho, relieved, says a brief prayer for us. I repeat what I said, for the road, for the chronicle: God has made men free.'],
         chronicle: ['The hidalgo, to the guards’ visible surprise, delivered a sustained speech of some minutes on the question of human freedom before God. The guards, who had a schedule to keep, heard him out with the rough courtesy of men who are not paid to engage in philosophy. When he had finished, the senior guard saluted him ironically and moved the convoy on.']
       },
       {
         id: 3,
-        label: 'Say nothing. Ride past.',
+        weight: -1, label: 'Say nothing. Ride past.',
         knight: ['I say nothing. Sancho is relieved. The chain passes. I ride for some hours without speaking. There is no moral victory in a silence of this kind. The order of knight-errantry permits prudence; that is not the same as saying prudence is owed. The silence will follow me.'],
         chronicle: ['The hidalgo, to Sancho’s surprise and relief, made no move to intervene. He rode past the convoy and for the rest of the afternoon said almost nothing. Sancho, looking sidelong at his master, later said to the innkeeper at Puerto Lápice that the señor had not been himself.']
       }
@@ -958,6 +963,7 @@ const CHAPTERS = [
     title: 'The Sierra Morena',
     subtitle: 'a hideout in the mountains, in the open air',
     illustId: 'illus-sierra-morena',
+    illustImg: 'images/chapter_5_sierra_morena.png',
     entry: {
       knight: [
         'We have come up into the sierra. There is no one on these paths. I have put off the armor. I am in shirt and breeches. I have chosen this place because Amadís de Gaula, when his lady turned from him, went into the Peña Pobre in just such a solitude and did penance; and Orlando at Roncesvalles, having lost Angélica, tore up trees and ran naked through the woods. These are the two models.',
@@ -972,19 +978,19 @@ const CHAPTERS = [
     choices: [
       {
         id: 1,
-        label: 'Perform the full penance. Handsprings in the shirt, as the books prescribe.',
+        weight: +1, label: 'Perform the full penance. Handsprings in the shirt, as the books prescribe.',
         knight: ['I ask Sancho to stand back and watch, so that he may report truly to Dulcinea what he saw. I take off my breeches. In shirt alone I turn two handsprings on the rocks, head down, heels up, showing the sky what the sky does not usually see from a man of fifty. I tear a young cork-oak from the ground and strike it against another. I compose, aloud, a sonnet to Dulcinea, and another, and a third. I tell Sancho: remember this. Tell her this. She asked for none of it; that is why it matters.'],
         chronicle: ['The hidalgo, in his shirt alone, performed on the rocks of the sierra two complete handsprings, and, by Sancho\'s later account at the inn, a third that was less successful. He uprooted a small tree. He composed verses aloud. Sancho, having been told to witness the performance and report it faithfully to the lady at El Toboso, watched with an expression the chronicler does not attempt to describe. The handsprings, Sancho said afterwards, were the part he found hardest to forget.']
       },
       {
         id: 2,
-        label: 'Skip the physical performance. Dictate the letter. Send Sancho.',
+        weight: 0, label: 'Skip the physical performance. Dictate the letter. Send Sancho.',
         knight: ['I decide the handsprings are for a younger man, or for a man with a better audience than rocks. I dictate the letter to Dulcinea instead. Sancho writes, or pretends to — I suspect the page is blank; no matter. I say the words aloud as though she were listening from behind the next stone. I tell her I am mad for her on purpose. I tell her the penance is an argument about the kind of life a man chooses. I send Sancho with the letter. I remain in the shirt. The shirt is the point.'],
         chronicle: ['The hidalgo, after some deliberation, chose to omit the more physical elements of the penance and dictated instead a letter to the lady Dulcinea del Toboso. Sancho, who could neither read nor reliably write, received the dictation and left immediately for El Toboso with what he later admitted was an empty saddlebag. The hidalgo remained on the mountain in his shirt, by his own stated choice.']
       },
       {
         id: 3,
-        label: 'Sit down on a rock. Reconsider. Then continue anyway.',
+        weight: -1, label: 'Sit down on a rock. Reconsider. Then continue anyway.',
         knight: ['I sit. Sancho sits with me. For a quarter of an hour I do not speak. I can see, from where I am sitting, the road we came up by, and beyond it the plain, and beyond that the village I have not seen since I rode out. I could turn around. No one is holding me here but the book I have read. That is the whole reason I am here. I stand up. I continue.'],
         chronicle: ['The hidalgo sat for some time without speaking on a rock facing the plain. Sancho, reading the silence as a possible return to reason, waited hopefully. After about a quarter of an hour the hidalgo rose, removed his breeches, and resumed the penance he had announced. Sancho departed shortly afterwards for El Toboso with the letter, leaving his master in a shirt in the mountains.']
       }
@@ -1000,6 +1006,7 @@ const CHAPTERS = [
     title: 'The Cage and the Canon',
     subtitle: 'on the road home, in the ox-cart cage',
     illustId: 'illus-cage-canon',
+    illustImg: 'images/chapter_6_cage_and_canon.png',
     entry: {
       knight: [
         'They are carrying me home in a cage drawn by oxen and I am not ashamed. The parish priest and the barber, old friends, have arranged this as for my good. The Canon of Toledo rides beside the cart. He is an educated man. He has been telling me, for the last league, that the books of chivalry I have read are false. He asks if I have anything to say in their defense.',
@@ -1014,7 +1021,7 @@ const CHAPTERS = [
     choices: [
       {
         id: 1,
-        label: 'Deliver the full defense.',
+        weight: +1, label: 'Deliver the full defense.',
         knight: ['I say everything. I do not hurry. I tell the Canon that a man in the middle of life who has refused to spend the rest of it doing nothing is not a man who has lost anything. I tell him that the books gave me the grammar of that refusal, and that no other books in my father’s house could have done so. I tell him I know the books are not literally true. I tell him it is the smaller question. When I finish, the road has not moved.'],
         chronicle: [
           'The hidalgo delivered his reply at length, without hesitation, and, as the chronicler notes, with the sound judgment of an intelligent man. The Canon, who had expected perhaps a rote defense, listened in visible surprise. When the hidalgo had finished, the Canon was silent for a long time.',
@@ -1023,13 +1030,13 @@ const CHAPTERS = [
       },
       {
         id: 2,
-        label: 'Concede. Ask to be unshackled. Promise to go home quietly.',
+        weight: -1, label: 'Concede. Ask to be unshackled. Promise to go home quietly.',
         knight: ['I concede. Not because the Canon is right — he is educated but he has not read what I have read — but because a cage is not the place from which a knight-errant argues his last argument. I ask to be unshackled, on my word that I will go home and rest. The Canon agrees. The cage is unlocked. We ride on. Tomorrow is a new morning. Tomorrow I will ride again.'],
         chronicle: ['The hidalgo conceded the argument to the Canon with every appearance of courteous resignation, and on his word that he would go home quietly, the cage was unlocked. The priest, relieved, let the matter rest. They arrived at the village in the afternoon. The niece and the housekeeper wept.']
       },
       {
         id: 3,
-        label: 'Fall silent.',
+        weight: 0, label: 'Fall silent.',
         knight: ['I say nothing. There is no sentence I could finish in this cage that would not be misheard. The Canon is an honest man and an educated man, and he has asked an honest question; but there is a kind of question that can only be answered by the life one has lived in spite of the question. I watch the road.'],
         chronicle: ['The hidalgo made no reply. The Canon, after a respectful pause, resumed the disputation on his own — laying out, for the edification of the priest and barber, the several reasons why the chivalric romances were false. The hidalgo listened. His expression did not change. The priest later told his wife he had never seen the man more lucid.']
       }
@@ -1051,6 +1058,7 @@ let S = {
   chIdx:        0,
   step:         'entry', // 'entry' | 'choice_made' | 'outro'
   choiceMade:   null,
+  sanchoMeter:  0,
   settings: {
     motion:    false,
     contrast:  false,
@@ -1132,7 +1140,13 @@ function clearColumns() {
 ────────────────────────────────────────────────────── */
 function showChapterIntro(ch, callback) {
   const intro = $('ch-intro');
-  $('ci-illus-wrap').innerHTML = makeSvgUse(ch.illustId);
+  if (ch.illustImg) {
+    const fallback = makeSvgUse(ch.illustId).replace(/`/g, '\\`');
+    $('ci-illus-wrap').innerHTML =
+      `<img src="${ch.illustImg}" alt="Chapter ${ch.id} illustration" class="ci-img" onerror="this.outerHTML=\`${fallback}\`;">`;
+  } else {
+    $('ci-illus-wrap').innerHTML = makeSvgUse(ch.illustId);
+  }
   $('ci-num').textContent = 'Chapter ' + ch.id;
   $('ci-title').textContent = ch.title;
   $('ci-subtitle').textContent = ch.subtitle;
@@ -1208,7 +1222,9 @@ function startChapter(idx) {
   // Update header
   $('ch-header-num').textContent  = 'Chapter ' + ch.id;
   $('ch-header-name').textContent = ch.title;
-  $('ch-thumb-wrap').innerHTML    = makeSvgUse(ch.illustId);
+  $('ch-thumb-wrap').innerHTML    = ch.illustImg
+    ? `<img src="${ch.illustImg}" alt="" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML=\`${makeSvgUse(ch.illustId).replace(/`/g,'\\`')}\`;">`
+    : makeSvgUse(ch.illustId);
 
   // Show intro, then populate entry
   showChapterIntro(ch, () => {
@@ -1226,6 +1242,7 @@ function makeChoice(n) {
 
   const ch     = CHAPTERS[S.chIdx];
   const choice = ch.choices.find(c => c.id === n);
+  S.sanchoMeter += (choice.weight || 0);
 
   // Mark button as picked
   document.querySelectorAll('.ch-btn').forEach(b => {
@@ -1260,14 +1277,29 @@ function advanceChapter() {
 
 function showClosing() {
   S.screen = 'closing';
+  const sanchoLine = S.sanchoMeter > 0
+    ? "Sancho, to the innkeeper at Puerto Lápice, three weeks later: ‘He was a good master. Whatever else he was, he was that.’"
+    : S.sanchoMeter < 0
+    ? "Sancho, to his wife on returning home: ‘He was tired. I am glad he is tired in his own bed.’"
+    : "Sancho, to no one in particular: ‘I rode with him. That is all I can say about it, and it is more than most.’";
+  const awBody = $('aw-body');
+  // Remove any previously injected Sancho line before inserting fresh
+  const old = awBody.nextElementSibling;
+  if (old && old.classList.contains('sancho-line')) old.remove();
+  const p = document.createElement('p');
+  p.className = 'sancho-line';
+  p.style.cssText = 'font-family:var(--font-k);font-style:italic;font-size:.9rem;color:var(--muted);margin-top:1.4em;line-height:1.65;';
+  p.textContent = sanchoLine;
+  awBody.insertAdjacentElement('afterend', p);
   showScreen('closing');
 }
 
 function restartGame() {
   closeSettings();
-  S.chIdx = 0;
-  S.step  = 'entry';
-  S.choiceMade = null;
+  S.chIdx       = 0;
+  S.step        = 'entry';
+  S.choiceMade  = null;
+  S.sanchoMeter = 0;
   showScreen('title');
 }
 
