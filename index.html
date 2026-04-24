@@ -795,7 +795,7 @@ const CHAPTERS = [
     entry: {
       knight: [
         'It is not yet light. The housekeeper is asleep. My niece is asleep. The nag is saddled. I am in armor my grandfather last wore for a funeral, and the armor fits me better than it fit him.',
-        'I am fifty. My olla is more beef than mutton. My Fridays are lentils, my Saturdays scraps, my Sundays a pigeon when there is a pigeon. Three-quarters of my income goes to clothing; what is left goes to a jerkin I wear only to Mass. I have no wife. I have no son. I have no profession. I have watched thirty years of mornings like this one happen through my window.',
+        'I am fifty. My olla is more beef than mutton. My Fridays are lentils, my Saturdays scraps, my Sundays a pigeon when there is a pigeon. Three-quarters of my income goes to that table; the rest to a doublet I wear only to Mass and a homespun for the working days. Whatever acres of mine are gone — and many are gone — have gone to the books on the shelf upstairs. Amadís. Palmerín. Belianís. I have no wife. I have no son. I have no profession. I have watched thirty years of mornings like this one happen through my window.',
         'Today I do not watch. Today I ride.'
       ],
       chronicle: [
@@ -1282,7 +1282,7 @@ function showClosing() {
     : S.sanchoMeter < 0
     ? "Sancho, to his wife on returning home: ‘He was tired. I am glad he is tired in his own bed.’"
     : "Sancho, to no one in particular: ‘I rode with him. That is all I can say about it, and it is more than most.’";
-  const awBody = $('aw-body');
+  const awBody = document.querySelector('.aw-body');
   // Remove any previously injected Sancho line before inserting fresh
   const old = awBody.nextElementSibling;
   if (old && old.classList.contains('sancho-line')) old.remove();
