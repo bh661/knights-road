@@ -434,7 +434,7 @@ body.big-font { --sz-k: 19px; --sz-c: 17px; }
 
   <!-- I.22 The Galley Slaves: prisoners chained, guards, knight -->
   <symbol id="illus-galley-slaves" viewBox="0 0 480 320">
-    <title>Chapter I.22 — The knight confronts the galley slaves.</title>
+    <title>Chapter I.22 — The knight confronts the chain gang.</title>
     <!-- Sky -->
     <rect width="480" height="320" fill="#b8c8d8"/>
     <!-- Ground -->
@@ -619,7 +619,7 @@ body.big-font { --sz-k: 19px; --sz-c: 17px; }
 ═══════════════════════════════════════════════════════ -->
 <div id="title-screen" class="screen">
   <h1 class="t-title">The Knight's Road</h1>
-  <p class="t-sub">An interactive reading of Don Quijote, Part I</p>
+  <p class="t-sub">An interactive reading of Don Quijote, Volume I</p>
   <p class="t-byline">Boheng Hu · Arts and Cultures Towards the Crossroads · Spring 2026</p>
   <blockquote class="t-epigraph">
     <em>"In a village of La Mancha, whose name I have no wish to remember, there lived not long ago a gentleman..."</em>
@@ -708,16 +708,15 @@ body.big-font { --sz-k: 19px; --sz-c: 17px; }
       <div class="cl-col">
         <span class="col-lbl">The Chronicle</span>
         <p>The Canon, who had ridden beside the cart for the better part of a day, said nothing for a long time. He had not, the chronicler observes, expected to be shaken. He was shaken.</p>
-        <p>Here ends the First Part of the history of the ingenious gentleman Don Quijote de la Mancha, by Miguel de Cervantes Saavedra, published at Madrid in the year of Our Lord 1605.</p>
+        <p>Here ends the First Volume of the history of the ingenious gentleman Don Quijote de la Mancha, by Miguel de Cervantes Saavedra, published at Madrid in the year of Our Lord 1605.</p>
       </div>
     </div>
 
     <div class="afterword">
       <p class="aw-title">Afterword — on what this game argues</p>
-      <p class="aw-body">Two voices have been running beside each other for the last twenty minutes. Neither was permitted to call the other wrong. That is the one argument this game is making: that Cervantes, in Part I, declines to tell his reader which voice to trust, and that the refusal is the novel's most serious and most generous act. The man in the cage has done something with his middle years that most of the men who read about him never do. Whether you call it madness, folly, a delay against death, or a life — Cervantes will not say, and this game will not say.</p>
+      <p class="aw-body">Two voices have been running beside each other for the last twenty minutes. Neither was permitted to call the other wrong. That is the one argument this game is making: that Cervantes, in Volume I, declines to tell his reader which voice to trust, and that the refusal is the novel's most serious and most generous act. The man in the cage has done something with his middle years that most of the men who read about him never do. Whether you call it madness, folly, a delay against death, or a life — Cervantes will not say, and this game will not say.</p>
       <div class="cl-btns">
         <button class="btn btn-fill" id="btn-play-again">Play again</button>
-        <button class="btn" id="btn-read-analysis">Read the written analysis</button>
       </div>
     </div>
   </div>
@@ -815,7 +814,7 @@ const CHAPTERS = [
         id: 2, weight: -1,
         label: 'Sit for one more hour at the window. Think.',
         knight: ['I sit. One more lentil Friday. One more. The gray turns to gold against the whitewash. There is nothing in this window I have not memorized. The horse below is ready. I have never been the man who does not ride.'],
-        chronicle: ['The hidalgo sat for a quarter of an hour at the upper window, watching the yard. At about the quarter to five, by the chronicler\'s reckoning, he rose from the window, descended the stair, and rode out.']
+        chronicle: ['The hidalgo sat for a quarter of an hour at the upper window, watching the yard. At about the quarter to five he rose, descended the stair, and rode out.']
       },
       {
         id: 3, weight: 0,
@@ -917,7 +916,7 @@ const CHAPTERS = [
 
   {
     id: 'I.22',
-    title: 'The Galley Slaves',
+    title: 'The Chain Gang',
     subtitle: 'the royal highway, late afternoon',
     illustId: 'illus-galley-slaves',
     illustImg: 'images/chapter_4_galley_slaves.png',
@@ -966,11 +965,11 @@ const CHAPTERS = [
     illustImg: 'images/chapter_5_sierra_morena.png',
     entry: {
       knight: [
-        'We have come up into the sierra. There is no one on these paths. I have put off the armor. I am in shirt and breeches. I have chosen this place because Amadís de Gaula, when his lady turned from him, went into the Peña Pobre in just such a solitude and did penance; and Orlando at Roncesvalles, having lost Angélica, tore up trees and ran naked through the woods. These are the two models.',
-        'Here is what I want to say plainly to my squire before he goes. Amadís had a cause. Orlando had a cause. I have none. Dulcinea has never wronged me. Dulcinea has never, to my knowledge, thought of me. The merit of doing penance with cause is small. The merit of doing penance without cause — of choosing it, because one has read the life and wishes to live inside it — is greater. That is precisely why I will do it.'
+        'We have come up into the sierra. I have put off the armor. I am in shirt alone. I chose this place because Amadís did penance on the Peña Pobre when his lady turned from him, and Orlando at Roncesvalles tore up trees in the woods having lost Angélica. These are the two models.',
+        'Here is what I want to say plainly to my squire before he goes. Amadís had a cause. Orlando had a cause. I have none. Dulcinea has never wronged me, and to my knowledge has never thought of me. The merit of doing penance with cause is small. The merit of doing it without cause is greater. That is precisely why I will do it.'
       ],
       chronicle: [
-        'The hidalgo and his squire, having escaped the Santa Hermandad after the matter of the galley chain, have climbed into the Sierra Morena. The hidalgo has stripped to his shirt. He has said twice that he intends to do penance on this mountain in the manner of Amadís de Gaula on the Peña Pobre and Orlando at Roncesvalles. The squire, Sancho Panza, is listening.',
+        'The hidalgo and his squire have climbed into the Sierra Morena, having escaped the Santa Hermandad. The hidalgo has stripped to his shirt. He has said twice that he intends to do penance here, in the manner of Amadís on the Peña Pobre and Orlando at Roncesvalles. Sancho is listening.',
         'Sancho, eventually: <em>"Señor — if your Dulcinea has not wronged you, and has never, by your own account, answered a letter of yours, then what cause have you to go mad for her at all?"</em>',
         'The hidalgo, evenly: <em>"That, precisely, is the point. To go mad with cause deserves no thanks. To go mad without one — that is the thing."</em>'
       ]
@@ -979,13 +978,13 @@ const CHAPTERS = [
       {
         id: 1,
         weight: +1, label: 'Perform the full penance. Handsprings in the shirt, as the books prescribe.',
-        knight: ['I ask Sancho to stand back and watch, so that he may report truly to Dulcinea what he saw. I take off my breeches. In shirt alone I turn two handsprings on the rocks, head down, heels up, showing the sky what the sky does not usually see from a man of fifty. I tear a young cork-oak from the ground and strike it against another. I compose, aloud, a sonnet to Dulcinea, and another, and a third. I tell Sancho: remember this. Tell her this. She asked for none of it; that is why it matters.'],
-        chronicle: ['The hidalgo, in his shirt alone, performed on the rocks of the sierra two complete handsprings, and, by Sancho\'s later account at the inn, a third that was less successful. He uprooted a small tree. He composed verses aloud. Sancho, having been told to witness the performance and report it faithfully to the lady at El Toboso, watched with an expression the chronicler does not attempt to describe. The handsprings, Sancho said afterwards, were the part he found hardest to forget.']
+        knight: ['I ask Sancho to stand back and watch, so that he can report truly to Dulcinea what he saw. I take off my breeches. In shirt alone I turn two handsprings on the rocks. I tear a young cork-oak from the ground. I compose a sonnet aloud, and another, and a third. I tell Sancho: remember this. Tell her this. She asked for none of it. That is why it matters.'],
+        chronicle: ['The hidalgo, in his shirt alone, performed two complete handsprings on the rocks of the sierra, and, by Sancho\'s later account, a third that was less successful. He uprooted a small tree. He composed verses aloud. Sancho, told to witness the performance and report it to the lady at El Toboso, watched with an expression the chronicler does not attempt to describe.']
       },
       {
         id: 2,
         weight: 0, label: 'Skip the physical performance. Dictate the letter. Send Sancho.',
-        knight: ['I decide the handsprings are for a younger man, or for a man with a better audience than rocks. I dictate the letter to Dulcinea instead. Sancho writes, or pretends to — I suspect the page is blank; no matter. I say the words aloud as though she were listening from behind the next stone. I tell her I am mad for her on purpose. I tell her the penance is an argument about the kind of life a man chooses. I send Sancho with the letter. I remain in the shirt. The shirt is the point.'],
+        knight: ['I decide the handsprings are for a younger man. I dictate the letter to Dulcinea instead. Sancho writes, or pretends to. I say the words aloud as if she were listening from behind the next stone. I tell her I am mad for her on purpose. I tell her the penance is an argument about the kind of life a man chooses. I send Sancho with the letter. I remain in the shirt. The shirt is the point.'],
         chronicle: ['The hidalgo, after some deliberation, chose to omit the more physical elements of the penance and dictated instead a letter to the lady Dulcinea del Toboso. Sancho, who could neither read nor reliably write, received the dictation and left immediately for El Toboso with what he later admitted was an empty saddlebag. The hidalgo remained on the mountain in his shirt, by his own stated choice.']
       },
       {
@@ -997,7 +996,7 @@ const CHAPTERS = [
     ],
     outro: {
       knight: ['Sancho is on the road with the letter. I am alone on the Peña Pobre I have chosen to call this rock. A knight cannot be known to have chosen what he chose unless someone can later report that he chose it. That is why Sancho had to see.'],
-      chronicle: ['Sancho Panza rode out of the sierra that afternoon, on a donkey, with what he described to the first muleteer he met as "a letter of great importance." The hidalgo, left behind on the mountain, was eventually found by the parish priest and the barber of his village, who had ridden out after him. After a long and ingenious deception involving a princess, a giant, and a false kingdom called Micomicón, they prevailed upon him to come down. He came down in a wooden cage on an ox-drawn cart. The chronicler, for reasons of space, compresses the journey here.']
+      chronicle: ['Sancho rode out of the sierra that afternoon on a donkey, carrying what he described to the first muleteer he met as "a letter of great importance." The hidalgo, left behind on the mountain, was eventually found by the parish priest and the barber of his village. After a long deception involving a princess and a false kingdom, they prevailed upon him to come down. He came down in a wooden cage on an ox-drawn cart.']
     }
   },
 
@@ -1009,8 +1008,8 @@ const CHAPTERS = [
     illustImg: 'images/chapter_6_cage_and_canon.png',
     entry: {
       knight: [
-        'They are carrying me home in a cage drawn by oxen and I am not ashamed. The parish priest and the barber, old friends, have arranged this as for my good. The Canon of Toledo rides beside the cart. He is an educated man. He has been telling me, for the last league, that the books of chivalry I have read are false. He asks if I have anything to say in their defense.',
-        'I say: Since I became a knight-errant I have been brave, courteous, liberal, well-bred, generous, polite, daring, patient, long-suffering. I have seen, by reading, whole countries of vivid beauty that drew me out into the world. I have been, in a word, richer in my fifty-first year than I was in my fiftieth. Whatever else you call it — madness, folly, a delay against death — these books have given me a life.'
+        'They are carrying me home in a cage drawn by oxen. I am not ashamed. The parish priest and the barber, old friends, have arranged this for my good. The Canon of Toledo rides beside the cart. He has been telling me, for the last league, that the books of chivalry I have read are false. He asks if I have anything to say in their defense.',
+        'I say: since I became a knight-errant I have been brave, courteous, generous, patient, long-suffering. I have seen, by reading, whole countries of vivid beauty that drew me out into the world. I have been richer in my fifty-first year than I was in my fiftieth. Whatever else you call it — madness, folly, a delay against death — these books have given me a life.'
       ],
       chronicle: [
         'The hidalgo is returning home, at the arrangement of the parish priest of his village, inside a wooden cage on an ox-drawn cart. The Canon of Toledo, met on the road, has joined the party and has been, for some time, conducting a learned disputation against the chivalric romances. The priest and the barber ride alongside, relieved that the hidalgo seems calmer than he has been in weeks.',
@@ -1022,7 +1021,7 @@ const CHAPTERS = [
       {
         id: 1,
         weight: +1, label: 'Deliver the full defense.',
-        knight: ['I say everything. I do not hurry. I tell the Canon that a man in the middle of life who has refused to spend the rest of it doing nothing is not a man who has lost anything. I tell him that the books gave me the grammar of that refusal, and that no other books in my father’s house could have done so. I tell him I know the books are not literally true. I tell him it is the smaller question. When I finish, the road has not moved.'],
+        knight: ['I say everything. I do not hurry. I tell the Canon that a man in the middle of life who has refused to spend the rest of it doing nothing has not lost anything. I tell him the books gave me the grammar of that refusal, and no other books in my father’s house could have done so. I know they are not literally true. That is the smaller question. When I finish, the road has not moved.'],
         chronicle: [
           'The hidalgo delivered his reply at length, without hesitation, and, as the chronicler notes, with the sound judgment of an intelligent man. The Canon, who had expected perhaps a rote defense, listened in visible surprise. When the hidalgo had finished, the Canon was silent for a long time.',
           '<em>“My friend, on every subject outside chivalry you have always spoken with the sound judgment of an intelligent man. On this subject — I had not expected to be shaken. You have shaken me. I concede it.”</em>'
@@ -1037,13 +1036,13 @@ const CHAPTERS = [
       {
         id: 3,
         weight: 0, label: 'Fall silent.',
-        knight: ['I say nothing. There is no sentence I could finish in this cage that would not be misheard. The Canon is an honest man and an educated man, and he has asked an honest question; but there is a kind of question that can only be answered by the life one has lived in spite of the question. I watch the road.'],
+        knight: ['I say nothing. There is no sentence I could finish in this cage that would not be misheard. The Canon is an honest man, and he has asked an honest question. But some questions can only be answered by the life one has lived in spite of them. I watch the road.'],
         chronicle: ['The hidalgo made no reply. The Canon, after a respectful pause, resumed the disputation on his own — laying out, for the edification of the priest and barber, the several reasons why the chivalric romances were false. The hidalgo listened. His expression did not change. The priest later told his wife he had never seen the man more lucid.']
       }
     ],
     outro: {
-      knight: ['Part the First ends. I do not. The chronicler Cide Hamete Benengeli, I am told, keeps what comes next. When you read it, remember: I rode.'],
-      chronicle: ['The party reached the hidalgo’s village the next afternoon. The niece and the housekeeper were waiting at the gate. Here ends the First Part of the history of the ingenious gentleman Don Quijote de la Mancha, by Miguel de Cervantes Saavedra, published at Madrid in the year of Our Lord 1605.']
+      knight: [‘Volume the First ends. I do not. The chronicler Cide Hamete Benengeli, I am told, keeps what comes next. When you read it, remember: I rode.’],
+      chronicle: ["The party reached the hidalgo’s village the next afternoon. The niece and the housekeeper were waiting at the gate. Here ends the First Volume of the history of the ingenious gentleman Don Quijote de la Mancha, by Miguel de Cervantes Saavedra, published at Madrid in the year of Our Lord 1605."]
     }
   }
 ];
@@ -1389,7 +1388,6 @@ $('btn-settings-open').addEventListener('click', toggleSettings);
 $('btn-restart-cl').addEventListener('click', restartGame);
 
 $('btn-play-again').addEventListener('click', restartGame);
-$('btn-read-analysis').addEventListener('click', () => openModal('analysis-modal'));
 
 // Close settings on outside click
 document.addEventListener('click', e => {
